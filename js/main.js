@@ -2,46 +2,65 @@
 document.addEventListener('DOMContentLoaded', function() {
   const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
   const mobileMenuOverlay = document.querySelector('.mobile-menu-overlay');
-  const mobileMenuClose = document.querySelector('.mobile-menu-close');
-  const mobileMenuBackdrop = document.querySelector('.mobile-menu-backdrop');
   const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+  
+  // Mobile social panel functionality
+  const socialPanelBtn = document.getElementById('socialPanelBtn');
+  const socialPanelContent = document.getElementById('socialPanelContent');
   
   // Debug logs to check if elements are found
   console.log('Mobile menu button found:', mobileMenuBtn);
   console.log('Mobile menu overlay found:', mobileMenuOverlay);
-  console.log('Mobile menu close found:', mobileMenuClose);
-  console.log('Mobile menu backdrop found:', mobileMenuBackdrop);
   console.log('Mobile nav links found:', mobileNavLinks.length);
+  console.log('Social panel button found:', socialPanelBtn);
+  console.log('Social panel content found:', socialPanelContent);
   
   if (mobileMenuBtn && mobileMenuOverlay) {
-    mobileMenuBtn.addEventListener('click', function() {
+    mobileMenuBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
       console.log('Mobile menu button clicked');
-      mobileMenuOverlay.classList.add('active');
-      document.body.style.overflow = 'hidden';
+      mobileMenuOverlay.classList.toggle('active');
     });
     
-    const closeMobileMenu = function() {
-      console.log('Closing mobile menu');
-      mobileMenuOverlay.classList.remove('active');
-      document.body.style.overflow = '';
-    };
-    
-    if (mobileMenuClose) {
-      mobileMenuClose.addEventListener('click', closeMobileMenu);
-    }
-    
-    if (mobileMenuBackdrop) {
-      mobileMenuBackdrop.addEventListener('click', closeMobileMenu);
-    }
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(e) {
+      if (mobileMenuOverlay.classList.contains('active') && 
+          !mobileMenuBtn.contains(e.target) && 
+          !mobileMenuOverlay.contains(e.target)) {
+        mobileMenuOverlay.classList.remove('active');
+      }
+    });
     
     // Close mobile menu when clicking on any navigation link
     if (mobileNavLinks) {
       mobileNavLinks.forEach(link => {
-        link.addEventListener('click', closeMobileMenu);
+        link.addEventListener('click', function() {
+          mobileMenuOverlay.classList.remove('active');
+        });
       });
     }
   } else {
     console.log('Mobile menu elements not found');
+  }
+  
+  // Mobile social panel functionality
+  if (socialPanelBtn && socialPanelContent) {
+    socialPanelBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      console.log('Social panel button clicked');
+      socialPanelContent.classList.toggle('show');
+    });
+    
+    // Close social panel when clicking outside
+    document.addEventListener('click', function(e) {
+      if (socialPanelContent.classList.contains('show') && 
+          !socialPanelBtn.contains(e.target) && 
+          !socialPanelContent.contains(e.target)) {
+        socialPanelContent.classList.remove('show');
+      }
+    });
+  } else {
+    console.log('Social panel elements not found');
   }
   
   // Header scroll effect
