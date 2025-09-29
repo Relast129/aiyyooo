@@ -2,6 +2,7 @@
 document.addEventListener('DOMContentLoaded', function() {
   const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
   const mobileMenuOverlay = document.querySelector('.mobile-menu-overlay');
+  const mobileMenuClose = document.querySelector('.mobile-menu-close');
   const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
   
   // Mobile social panel functionality
@@ -11,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Debug logs to check if elements are found
   console.log('Mobile menu button found:', mobileMenuBtn);
   console.log('Mobile menu overlay found:', mobileMenuOverlay);
+  console.log('Mobile menu close button found:', mobileMenuClose);
   console.log('Mobile nav links found:', mobileNavLinks.length);
   console.log('Social panel button found:', socialPanelBtn);
   console.log('Social panel content found:', socialPanelContent);
@@ -22,11 +24,20 @@ document.addEventListener('DOMContentLoaded', function() {
       mobileMenuOverlay.classList.toggle('active');
     });
     
+    // Close mobile menu when clicking close button
+    if (mobileMenuClose) {
+      mobileMenuClose.addEventListener('click', function(e) {
+        e.stopPropagation();
+        mobileMenuOverlay.classList.remove('active');
+      });
+    }
+    
     // Close mobile menu when clicking outside
     document.addEventListener('click', function(e) {
       if (mobileMenuOverlay.classList.contains('active') && 
           !mobileMenuBtn.contains(e.target) && 
-          !mobileMenuOverlay.contains(e.target)) {
+          !mobileMenuOverlay.contains(e.target) &&
+          !mobileMenuClose.contains(e.target)) {
         mobileMenuOverlay.classList.remove('active');
       }
     });
