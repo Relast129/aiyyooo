@@ -42,6 +42,13 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
     
+    // Close mobile menu when pressing Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && mobileMenuOverlay.classList.contains('active')) {
+        mobileMenuOverlay.classList.remove('active');
+      }
+    });
+    
     // Close mobile menu when clicking on any navigation link
     if (mobileNavLinks) {
       mobileNavLinks.forEach(link => {
