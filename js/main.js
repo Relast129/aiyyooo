@@ -18,10 +18,22 @@ document.addEventListener('DOMContentLoaded', function() {
   console.log('Social panel content found:', socialPanelContent);
   
   if (mobileMenuBtn && mobileMenuOverlay) {
+    // Update aria-expanded attribute when menu is toggled
+    function updateMenuButtonState() {
+      const isOpen = mobileMenuOverlay.classList.contains('active');
+      mobileMenuBtn.setAttribute('aria-expanded', isOpen);
+      
+      // Focus the close button when menu opens
+      if (isOpen && mobileMenuClose) {
+        mobileMenuClose.focus();
+      }
+    }
+    
     mobileMenuBtn.addEventListener('click', function(e) {
       e.stopPropagation();
       console.log('Mobile menu button clicked');
       mobileMenuOverlay.classList.toggle('active');
+      updateMenuButtonState();
     });
     
     // Close mobile menu when clicking close button
@@ -29,6 +41,8 @@ document.addEventListener('DOMContentLoaded', function() {
       mobileMenuClose.addEventListener('click', function(e) {
         e.stopPropagation();
         mobileMenuOverlay.classList.remove('active');
+        updateMenuButtonState();
+        mobileMenuBtn.focus(); // Return focus to menu button
       });
     }
     
@@ -39,6 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
           !mobileMenuOverlay.contains(e.target) &&
           !mobileMenuClose.contains(e.target)) {
         mobileMenuOverlay.classList.remove('active');
+        updateMenuButtonState();
       }
     });
     
@@ -46,6 +61,8 @@ document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape' && mobileMenuOverlay.classList.contains('active')) {
         mobileMenuOverlay.classList.remove('active');
+        updateMenuButtonState();
+        mobileMenuBtn.focus(); // Return focus to menu button
       }
     });
     
@@ -54,6 +71,8 @@ document.addEventListener('DOMContentLoaded', function() {
       mobileNavLinks.forEach(link => {
         link.addEventListener('click', function() {
           mobileMenuOverlay.classList.remove('active');
+          updateMenuButtonState();
+          mobileMenuBtn.focus(); // Return focus to menu button
         });
       });
     }
