@@ -1126,6 +1126,18 @@ a:hover {
     width: 1.2rem;
     height: 1.2rem;
   }
+  
+  /* Make mobile menu more compact */
+  .mobile-menu-nav {
+    padding: 0.5rem;
+  }
+  
+  .mobile-nav-link {
+    padding: 0.85rem 1rem;
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+    border-radius: 0.5rem;
+  }
 }
 
 /* Ensure mobile menu doesn't interfere with desktop layout */
@@ -1280,6 +1292,24 @@ a:hover {
     padding: 0.9rem;
     font-size: 1rem;
     border-radius: 0.6rem;
+  }
+}
+
+/* Ensure mobile menu is compact and only shows essential items */
+@media (max-width: 768px) {
+  .mobile-menu-panel {
+    max-height: 80vh;
+  }
+  
+  .mobile-menu-nav {
+    padding: 0.5rem;
+  }
+  
+  .mobile-nav-link {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+    border-radius: 0.5rem;
   }
 }
 
@@ -2827,6 +2857,15 @@ a:hover {
   
   .logo-subtext {
     font-size: 0.75rem;
+  }
+  
+  /* Optimize header for mobile */
+  .header-container {
+    height: 4rem;
+  }
+  
+  .logo {
+    gap: 0.75rem;
   }
   
   .hero-title {
