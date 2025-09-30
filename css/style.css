@@ -4811,3 +4811,121 @@ a:hover {
     display: block;
   }
 }
+
+/* Responsive Navbar Styles */
+
+/* Hide mobile menu and hamburger by default */
+.mobile-menu-btn,
+.mobile-menu-dropdown,
+.mobile-menu-backdrop {
+  display: none;
+}
+
+/* Show desktop nav by default */
+.nav-desktop,
+.nav-cta {
+  display: flex;
+}
+
+/* Mobile styles */
+@media (max-width: 900px) {
+  .nav-desktop,
+  .nav-cta {
+    display: none !important;
+  }
+  .mobile-menu-btn {
+    display: flex !important;
+    align-items: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: auto;
+    z-index: 120;
+    padding: 0.5rem;
+  }
+  .header-container {
+    justify-content: flex-start;
+    gap: 1rem;
+  }
+  .mobile-menu-dropdown {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    background: #fff;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    z-index: 200;
+    padding: 2.5rem 1.5rem 1.5rem 1.5rem;
+    border-radius: 0 0 1.25rem 1.25rem;
+    transform: translateY(-110%);
+    transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+    pointer-events: none;
+    opacity: 0;
+  }
+  .mobile-menu-dropdown.open {
+    transform: translateY(0);
+    pointer-events: auto;
+    opacity: 1;
+  }
+  .mobile-menu-close {
+    background: none;
+    border: none;
+    align-self: flex-end;
+    margin-bottom: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    transition: background 0.2s;
+  }
+  .mobile-menu-close:focus,
+  .mobile-menu-close:hover {
+    background: #f3f4f6;
+    outline: none;
+  }
+  .mobile-nav-link {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #222;
+    text-decoration: none;
+    padding: 1rem 0;
+    border-radius: 0.75rem;
+    margin-bottom: 0.25rem;
+    transition: background 0.2s, color 0.2s;
+    outline: none;
+  }
+  .mobile-nav-link.active,
+  .mobile-nav-link:focus,
+  .mobile-nav-link:hover {
+    background: linear-gradient(90deg, #00a896 0%, #f9c80e 100%);
+    color: #fff;
+  }
+  .mobile-menu-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.18);
+    z-index: 150;
+    transition: opacity 0.2s;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .mobile-menu-backdrop.show {
+    display: block;
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+/* Ensure logo and brand always visible */
+@media (max-width: 900px) {
+  .logo {
+    z-index: 201;
+  }
+}
+
+/* Prevent body scroll when menu open */
+body.menu-open {
+  overflow: hidden;
+}
