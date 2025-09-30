@@ -20,6 +20,7 @@
                 </div>
             </a>
             
+            <!-- Desktop Navbar -->
             <nav class="nav-desktop">
                 <div class="nav-links">
                     <a href="index.html" class="nav-link">Home</a>
@@ -32,45 +33,30 @@
                 <button class="btn btn-outline btn-sm" data-whatsapp="https://wa.me/94768118780">WhatsApp</button>
                 <a href="contact.html" class="btn btn-primary btn-sm">Contact</a>
             </div>
-            
-            <button class="mobile-menu-btn" aria-label="Toggle mobile menu" aria-expanded="false">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="3" y1="12" x2="21" y2="12"></line>
+
+            <!-- Hamburger Button (Mobile Only) -->
+            <button class="mobile-menu-btn" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobileMenuDropdown">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
                     <line x1="3" y1="18" x2="21" y2="18"></line>
                 </svg>
             </button>
         </div>
-        
-        <!-- Mobile Menu Overlay -->
-        <div class="mobile-menu-overlay">
-            <div class="mobile-menu-backdrop"></div>
-            <div class="mobile-menu-panel">
-                <div class="mobile-menu-header">
-                    <div class="mobile-menu-logo">
-                        <img src="images/logo.png" alt="Ceyora Holidays Logo" class="mobile-menu-logo-img">
-                        <div class="mobile-menu-logo-text">Ceyora Holidays</div>
-                    </div>
-                    <button class="mobile-menu-close">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="18" y1="6" x2="6" y2="18"></line>
-                            <line x1="6" y1="6" x2="18" y2="18"></line>
-                        </svg>
-                    </button>
-                </div>
-                <nav class="mobile-menu-nav">
-                    <a href="index.html" class="mobile-nav-link">
-                        <span>Home</span>
-                    </a>
-                    <a href="about.html" class="mobile-nav-link">
-                        <span>About</span>
-                    </a>
-                    <a href="contact.html" class="mobile-nav-link active">
-                        <span>Contact</span>
-                    </a>
-                </nav>
-            </div>
-        </div>
+
+        <!-- Mobile Dropdown Menu -->
+        <nav id="mobileMenuDropdown" class="mobile-menu-dropdown" aria-hidden="true">
+            <button class="mobile-menu-close" aria-label="Close navigation menu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            <a href="index.html" class="mobile-nav-link">Home</a>
+            <a href="about.html" class="mobile-nav-link">About</a>
+            <a href="contact.html" class="mobile-nav-link active">Contact</a>
+        </nav>
+        <div class="mobile-menu-backdrop"></div>
     </header>
     
     <!-- Main Content -->
@@ -516,5 +502,55 @@
     </a>
     
     <script src="js/main.js"></script>
+    <script>
+    // Responsive Navbar Toggle
+    (function() {
+        const menuBtn = document.querySelector('.mobile-menu-btn');
+        const menu = document.getElementById('mobileMenuDropdown');
+        const closeBtn = document.querySelector('.mobile-menu-close');
+        const backdrop = document.querySelector('.mobile-menu-backdrop');
+        const focusableSelectors = 'a.mobile-nav-link, .mobile-menu-close';
+
+        function openMenu() {
+            menu.classList.add('open');
+            menu.setAttribute('aria-hidden', 'false');
+            menuBtn.setAttribute('aria-expanded', 'true');
+            backdrop.classList.add('show');
+            setTimeout(() => {
+                const firstLink = menu.querySelector('a.mobile-nav-link');
+                if (firstLink) firstLink.focus();
+            }, 100);
+            document.body.style.overflow = 'hidden';
+        }
+        function closeMenu() {
+            menu.classList.remove('open');
+            menu.setAttribute('aria-hidden', 'true');
+            menuBtn.setAttribute('aria-expanded', 'false');
+            backdrop.classList.remove('show');
+            menuBtn.focus();
+            document.body.style.overflow = '';
+        }
+        menuBtn.addEventListener('click', openMenu);
+        closeBtn.addEventListener('click', closeMenu);
+        backdrop.addEventListener('click', closeMenu);
+
+        menu.addEventListener('keydown', function(e) {
+            const focusable = Array.from(menu.querySelectorAll(focusableSelectors));
+            const idx = focusable.indexOf(document.activeElement);
+            if (e.key === 'Tab') {
+                if (e.shiftKey && idx === 0) {
+                    e.preventDefault();
+                    focusable[focusable.length - 1].focus();
+                } else if (!e.shiftKey && idx === focusable.length - 1) {
+                    e.preventDefault();
+                    focusable[0].focus();
+                }
+            }
+            if (e.key === 'Escape') {
+                closeMenu();
+            }
+        });
+    })();
+    </script>
 </body>
 </html>
