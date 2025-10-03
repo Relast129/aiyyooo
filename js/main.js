@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', function() {
     button.addEventListener('click', function() {
       const message = this.getAttribute('data-whatsapp');
       const encodedMessage = encodeURIComponent(message);
-      window.open(`https://wa.me/94768118780?text=${encodedMessage}`, '_blank');
+      window.open(`https://wa.me/94772885558?text=${encodedMessage}`, '_blank');
     });
   });
   
@@ -239,7 +239,7 @@ document.addEventListener('DOMContentLoaded', function() {
       e.preventDefault();
       
       // Redirect to WhatsApp instead of email submission
-      window.open('https://wa.me/94768118780?text=Hi! I\'d like to get updates on Sri Lanka travel deals and tips.', '_blank');
+      window.open('https://wa.me/94772885558?text=Hi! I\'d like to get updates on Sri Lanka travel deals and tips.', '_blank');
     });
   }
   
