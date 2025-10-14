@@ -344,3 +344,131 @@ function scrollToSection(sectionId) {
     section.scrollIntoView({ behavior: 'smooth' });
   }
 }
+
+// ============================================
+// MODERN ENHANCEMENTS - Parallax & Animations
+// ============================================
+
+// Parallax scroll effect for sections
+window.addEventListener('scroll', function() {
+  const scrolled = window.pageYOffset;
+  
+  // Parallax for floating elements
+  const floatingElements = document.querySelectorAll('.floating-element');
+  floatingElements.forEach((element, index) => {
+    const speed = 0.1 + (index * 0.05);
+    const yPos = -(scrolled * speed);
+    element.style.transform = `translateY(${yPos}px)`;
+  });
+  
+  // Parallax for journey background circles
+  const journeyBgCircles = document.querySelectorAll('.journey-bg-circle-1, .journey-bg-circle-2');
+  journeyBgCircles.forEach((circle, index) => {
+    const speed = index === 0 ? 0.15 : 0.2;
+    const yPos = scrolled * speed;
+    circle.style.transform = `translateY(${yPos}px)`;
+  });
+});
+
+// Scroll reveal animations
+const observerOptions = {
+  threshold: 0.1,
+  rootMargin: '0px 0px -100px 0px'
+};
+
+const observer = new IntersectionObserver(function(entries) {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('animate-in');
+      
+      // Add stagger effect for children
+      const children = entry.target.querySelectorAll('.stagger-item');
+      children.forEach((child, index) => {
+        setTimeout(() => {
+          child.classList.add('animate-in');
+        }, index * 100);
+      });
+    }
+  });
+}, observerOptions);
+
+// Observe elements for scroll animations
+document.addEventListener('DOMContentLoaded', function() {
+  const animateElements = document.querySelectorAll('.journey, .gallery, .features-grid, .contact-packages, .call-to-action, .why-choose-us, .contact-cta');
+  animateElements.forEach(el => observer.observe(el));
+  
+  // Add stagger-item class to grid children
+  const featureCards = document.querySelectorAll('.feature-card');
+  featureCards.forEach(card => card.classList.add('stagger-item'));
+  
+  const galleryItems = document.querySelectorAll('.gallery-item');
+  galleryItems.forEach(item => item.classList.add('stagger-item'));
+});
+
+// Mouse move parallax effect for cards
+document.addEventListener('mousemove', function(e) {
+  const cards = document.querySelectorAll('.journey-card, .feature-card, .contact-card');
+  
+  cards.forEach(card => {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    
+    const rotateX = (y - centerY) / 20;
+    const rotateY = (centerX - x) / 20;
+    
+    if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+    } else {
+      card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+    }
+  });
+});
+
+// Add smooth reveal for badges
+const badges = document.querySelectorAll('.badge');
+badges.forEach((badge, index) => {
+  badge.style.animationDelay = `${index * 0.1}s`;
+  badge.classList.add('fade-in-badge');
+});
+
+// Magnetic button effect
+const buttons = document.querySelectorAll('.btn');
+buttons.forEach(button => {
+  button.addEventListener('mousemove', function(e) {
+    const rect = this.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    
+    this.style.transform = `translate(${x * 0.1}px, ${y * 0.1}px)`;
+  });
+  
+  button.addEventListener('mouseleave', function() {
+    this.style.transform = 'translate(0, 0)';
+  });
+});
+
+// Smooth scroll progress indicator
+const progressBar = document.createElement('div');
+progressBar.className = 'scroll-progress';
+progressBar.style.cssText = `
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #00a896, #f9c80e);
+  z-index: 9999;
+  transition: width 0.1s ease;
+  box-shadow: 0 2px 10px rgba(0, 168, 150, 0.5);
+`;
+document.body.appendChild(progressBar);
+
+window.addEventListener('scroll', function() {
+  const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+  const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  const scrolled = (winScroll / height) * 100;
+  progressBar.style.width = scrolled + '%';
+});
