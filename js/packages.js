@@ -300,7 +300,7 @@ function renderPackages() {
                         <div class="price-container">
                             <span class="price-original">$${pkg.priceOriginal}</span>
                             <span class="price-current">$${pkg.priceCurrent}</span>
-                            <span class="price-label">per person</span>
+                            <span class="price-label">per couple</span>
                         </div>
                         <button class="btn btn-primary btn-book" data-whatsapp="Hi! I'm interested in the ${pkg.title.replace(/[🚗🐚🚙]/g, '').trim()} ($${pkg.priceCurrent}). Can you provide more details?">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
