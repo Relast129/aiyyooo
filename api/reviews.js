@@ -1,24 +1,31 @@
 // Vercel Serverless Function for Reviews Management
 // Uses Vercel Blob Store for persistent storage
-import { put, head } from '@vercel/blob';
+import { put, list } from '@vercel/blob';
 
 const REVIEWS_BLOB_PATH = 'reviews-data.json';
 
 // Helper to get reviews from Blob Store
 async function getReviews() {
   try {
-    // Try to fetch existing reviews from Blob Store
-    const response = await fetch(`https://${process.env.BLOB_READ_WRITE_TOKEN?.split('_')[0]}.public.blob.vercel-storage.com/${REVIEWS_BLOB_PATH}`);
+    // List all blobs and find the reviews file
+    const { blobs } = await list();
+    const reviewsBlob = blobs.find(blob => blob.pathname === REVIEWS_BLOB_PATH);
     
-    if (response.ok) {
-      const data = await response.json();
-      return data;
+    if (reviewsBlob) {
+      // Fetch the reviews file
+      const response = await fetch(reviewsBlob.url);
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Reviews loaded from Blob Store:', data.length, 'reviews');
+        return data;
+      }
     }
     
     // If file doesn't exist yet, return empty array
+    console.log('No reviews found in Blob Store, returning empty array');
     return [];
   } catch (error) {
-    console.log('Error fetching reviews from Blob, returning empty array:', error.message);
+    console.error('Error fetching reviews from Blob:', error.message);
     return [];
   }
 }

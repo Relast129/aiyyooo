@@ -7,18 +7,25 @@ const GALLERY_METADATA_PATH = 'gallery-metadata.json';
 // Helper to get gallery metadata from Blob Store
 async function getGalleryMetadata() {
   try {
-    // Try to fetch existing metadata from Blob Store
-    const response = await fetch(`https://${process.env.BLOB_READ_WRITE_TOKEN?.split('_')[0]}.public.blob.vercel-storage.com/${GALLERY_METADATA_PATH}`);
+    // List all blobs and find the metadata file
+    const { blobs } = await list();
+    const metadataBlob = blobs.find(blob => blob.pathname === GALLERY_METADATA_PATH);
     
-    if (response.ok) {
-      const data = await response.json();
-      return data;
+    if (metadataBlob) {
+      // Fetch the metadata file
+      const response = await fetch(metadataBlob.url);
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Gallery metadata loaded from Blob Store:', data.length, 'images');
+        return data;
+      }
     }
     
     // If file doesn't exist yet, return empty array
+    console.log('No gallery metadata found in Blob Store, returning empty array');
     return [];
   } catch (error) {
-    console.log('Error fetching gallery metadata from Blob, returning empty array:', error.message);
+    console.error('Error fetching gallery metadata from Blob:', error.message);
     return [];
   }
 }

@@ -9,38 +9,48 @@ async function loadGalleryImages() {
         
         console.log('Gallery API response:', result);
         
+        const galleryGrid = document.querySelector('.gallery-grid');
+        if (!galleryGrid) {
+            console.error('Gallery grid not found');
+            return;
+        }
+        
         if (result.success && result.data && result.data.length > 0) {
-            const galleryGrid = document.querySelector('.gallery-grid');
-            if (!galleryGrid) {
-                console.error('Gallery grid not found');
-                return;
-            }
+            console.log(`Found ${result.data.length} uploaded images from Blob Store`);
             
-            console.log(`Found ${result.data.length} images from API`);
+            // Add uploaded images at the beginning (before static images)
+            // Reverse the array so newest images appear first
+            const reversedImages = [...result.data].reverse();
             
-            // Add dynamic images at the beginning (prepend)
-            result.data.forEach(image => {
+            reversedImages.forEach(image => {
                 const galleryItem = document.createElement('div');
-                galleryItem.className = 'gallery-item';
+                galleryItem.className = 'gallery-item uploaded-image';
                 galleryItem.innerHTML = `
                     <img src="${image.data}" alt="${image.caption}" class="gallery-image" title="${image.caption}">
+                    <div class="image-caption">${image.caption}</div>
                 `;
-                // Insert at the beginning
+                // Insert at the beginning (before static images)
                 galleryGrid.insertBefore(galleryItem, galleryGrid.firstChild);
             });
             
-            console.log('Gallery images loaded successfully');
+            console.log(`Gallery now shows: ${result.data.length} uploaded images + static images`);
             
             // Reinitialize lightbox if it exists
             if (typeof initLightbox === 'function') {
                 initLightbox();
             }
         } else {
-            console.log('No images from API, showing static images only');
+            console.log('No uploaded images from API, showing static images only');
         }
+        
+        // Count total images
+        const totalImages = galleryGrid.querySelectorAll('.gallery-item').length;
+        console.log(`Total images in gallery: ${totalImages}`);
+        
     } catch (error) {
         console.error('Error loading gallery images:', error);
         // Keep static images if API fails
+        console.log('Showing static images only due to error');
     }
 }
 
