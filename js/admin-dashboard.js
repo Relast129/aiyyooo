@@ -14,51 +14,71 @@ tabs.forEach(tab => {
     });
 });
 
+// API Base URL
+const API_BASE = '/api';
+
 // Gallery Management
-function getGalleryImages() {
-    const images = localStorage.getItem('galleryImages');
-    return images ? JSON.parse(images) : [];
+async function getGalleryImages() {
+    try {
+        const response = await fetch(`${API_BASE}/gallery`);
+        const result = await response.json();
+        return result.success ? result.data : [];
+    } catch (error) {
+        console.error('Error fetching gallery images:', error);
+        return [];
+    }
 }
 
-function saveGalleryImages(images) {
-    localStorage.setItem('galleryImages', JSON.stringify(images));
-}
-
-function renderGalleryList() {
+async function renderGalleryList() {
     const galleryList = document.getElementById('galleryList');
-    const images = getGalleryImages();
+    galleryList.innerHTML = '<p style="text-align: center; color: #999; padding: 2rem;">Loading...</p>';
+    
+    const images = await getGalleryImages();
     
     if (images.length === 0) {
         galleryList.innerHTML = '<p style="text-align: center; color: #999; padding: 2rem;">No images uploaded yet.</p>';
         return;
     }
     
-    galleryList.innerHTML = images.map((img, index) => `
+    galleryList.innerHTML = images.map(img => `
         <div class="gallery-item">
             <img src="${img.data}" alt="${img.caption}">
             <div class="gallery-item-info">
                 <div class="gallery-item-caption">${img.caption}</div>
                 <div class="gallery-item-actions">
-                    <button class="btn-delete" onclick="deleteGalleryImage(${index})">Delete</button>
+                    <button class="btn-delete" onclick="deleteGalleryImage('${img.id}')">Delete</button>
                 </div>
             </div>
         </div>
     `).join('');
 }
 
-function deleteGalleryImage(index) {
+async function deleteGalleryImage(id) {
     if (confirm('Are you sure you want to delete this image?')) {
-        const images = getGalleryImages();
-        images.splice(index, 1);
-        saveGalleryImages(images);
-        renderGalleryList();
+        try {
+            const response = await fetch(`${API_BASE}/gallery`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id })
+            });
+            const result = await response.json();
+            if (result.success) {
+                alert('Image deleted successfully!');
+                renderGalleryList();
+            } else {
+                alert('Error deleting image: ' + result.error);
+            }
+        } catch (error) {
+            console.error('Error deleting image:', error);
+            alert('Error deleting image. Please try again.');
+        }
     }
 }
 
 // Upload gallery image
 const uploadGalleryForm = document.getElementById('uploadGalleryForm');
 if (uploadGalleryForm) {
-    uploadGalleryForm.addEventListener('submit', function(e) {
+    uploadGalleryForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         
         const fileInput = document.getElementById('galleryImage');
@@ -66,18 +86,36 @@ if (uploadGalleryForm) {
         const file = fileInput.files[0];
         
         if (file) {
+            // Check file size (max 4MB for Vercel KV)
+            if (file.size > 4 * 1024 * 1024) {
+                alert('Image size should be less than 4MB. Please compress the image and try again.');
+                return;
+            }
+            
             const reader = new FileReader();
-            reader.onload = function(e) {
-                const images = getGalleryImages();
-                images.push({
-                    data: e.target.result,
-                    caption: caption,
-                    date: new Date().toISOString()
-                });
-                saveGalleryImages(images);
-                renderGalleryList();
-                uploadGalleryForm.reset();
-                alert('Image uploaded successfully!');
+            reader.onload = async function(e) {
+                try {
+                    const response = await fetch(`${API_BASE}/gallery`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            data: e.target.result,
+                            caption: caption,
+                            date: new Date().toISOString()
+                        })
+                    });
+                    const result = await response.json();
+                    if (result.success) {
+                        alert('Image uploaded successfully!');
+                        renderGalleryList();
+                        uploadGalleryForm.reset();
+                    } else {
+                        alert('Error uploading image: ' + result.error);
+                    }
+                } catch (error) {
+                    console.error('Error uploading image:', error);
+                    alert('Error uploading image. Please try again.');
+                }
             };
             reader.readAsDataURL(file);
         }
@@ -85,25 +123,29 @@ if (uploadGalleryForm) {
 }
 
 // Reviews Management
-function getReviews() {
-    const reviews = localStorage.getItem('reviews');
-    return reviews ? JSON.parse(reviews) : [];
+async function getReviews() {
+    try {
+        const response = await fetch(`${API_BASE}/reviews`);
+        const result = await response.json();
+        return result.success ? result.data : [];
+    } catch (error) {
+        console.error('Error fetching reviews:', error);
+        return [];
+    }
 }
 
-function saveReviews(reviews) {
-    localStorage.setItem('reviews', JSON.stringify(reviews));
-}
-
-function renderReviewsList() {
+async function renderReviewsList() {
     const reviewsList = document.getElementById('reviewsList');
-    const reviews = getReviews();
+    reviewsList.innerHTML = '<p style="text-align: center; color: #999; padding: 2rem;">Loading...</p>';
+    
+    const reviews = await getReviews();
     
     if (reviews.length === 0) {
         reviewsList.innerHTML = '<p style="text-align: center; color: #999; padding: 2rem;">No reviews yet.</p>';
         return;
     }
     
-    reviewsList.innerHTML = reviews.map((review, index) => `
+    reviewsList.innerHTML = reviews.map(review => `
         <div class="review-item">
             <div class="review-header">
                 <div>
@@ -118,34 +160,59 @@ function renderReviewsList() {
             <div class="review-text">${review.text}</div>
             ${review.email ? `<div style="color: #999; font-size: 0.9rem;">Email: ${review.email}</div>` : ''}
             <div class="review-actions">
-                ${review.status === 'pending' ? `<button class="btn-approve" onclick="approveReview(${index})">Approve</button>` : ''}
-                <button class="btn-delete" onclick="deleteReview(${index})">Delete</button>
+                ${review.status === 'pending' ? `<button class="btn-approve" onclick="approveReview('${review.id}')">Approve</button>` : ''}
+                <button class="btn-delete" onclick="deleteReview('${review.id}')">Delete</button>
             </div>
         </div>
     `).join('');
 }
 
-function approveReview(index) {
-    const reviews = getReviews();
-    reviews[index].status = 'approved';
-    saveReviews(reviews);
-    renderReviewsList();
-    alert('Review approved!');
+async function approveReview(id) {
+    try {
+        const response = await fetch(`${API_BASE}/reviews`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id, status: 'approved' })
+        });
+        const result = await response.json();
+        if (result.success) {
+            alert('Review approved!');
+            renderReviewsList();
+        } else {
+            alert('Error approving review: ' + result.error);
+        }
+    } catch (error) {
+        console.error('Error approving review:', error);
+        alert('Error approving review. Please try again.');
+    }
 }
 
-function deleteReview(index) {
+async function deleteReview(id) {
     if (confirm('Are you sure you want to delete this review?')) {
-        const reviews = getReviews();
-        reviews.splice(index, 1);
-        saveReviews(reviews);
-        renderReviewsList();
+        try {
+            const response = await fetch(`${API_BASE}/reviews`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id })
+            });
+            const result = await response.json();
+            if (result.success) {
+                alert('Review deleted successfully!');
+                renderReviewsList();
+            } else {
+                alert('Error deleting review: ' + result.error);
+            }
+        } catch (error) {
+            console.error('Error deleting review:', error);
+            alert('Error deleting review. Please try again.');
+        }
     }
 }
 
 // Add review (admin)
 const addReviewForm = document.getElementById('addReviewForm');
 if (addReviewForm) {
-    addReviewForm.addEventListener('submit', function(e) {
+    addReviewForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         
         const review = {
@@ -153,17 +220,27 @@ if (addReviewForm) {
             country: document.getElementById('reviewCountry').value,
             rating: parseInt(document.getElementById('reviewRating').value),
             text: document.getElementById('reviewText').value,
-            date: new Date().toISOString(),
-            status: 'approved',
             source: 'admin'
         };
         
-        const reviews = getReviews();
-        reviews.unshift(review);
-        saveReviews(reviews);
-        renderReviewsList();
-        addReviewForm.reset();
-        alert('Review added successfully!');
+        try {
+            const response = await fetch(`${API_BASE}/reviews`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(review)
+            });
+            const result = await response.json();
+            if (result.success) {
+                alert('Review added successfully!');
+                renderReviewsList();
+                addReviewForm.reset();
+            } else {
+                alert('Error adding review: ' + result.error);
+            }
+        } catch (error) {
+            console.error('Error adding review:', error);
+            alert('Error adding review. Please try again.');
+        }
     });
 }
 

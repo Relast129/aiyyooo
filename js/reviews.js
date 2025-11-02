@@ -1,22 +1,24 @@
-// Get reviews from localStorage
-function getReviews() {
-    const reviews = localStorage.getItem('reviews');
-    return reviews ? JSON.parse(reviews) : [];
-}
+// API Base URL
+const API_BASE = '/api';
 
-function saveReviews(reviews) {
-    localStorage.setItem('reviews', JSON.stringify(reviews));
-}
-
-// Get approved reviews only
-function getApprovedReviews() {
-    return getReviews().filter(review => review.status === 'approved');
+// Get approved reviews from API
+async function getApprovedReviews() {
+    try {
+        const response = await fetch(`${API_BASE}/reviews?approved=true`);
+        const result = await response.json();
+        return result.success ? result.data : [];
+    } catch (error) {
+        console.error('Error fetching reviews:', error);
+        return [];
+    }
 }
 
 // Render reviews
-function renderReviews() {
+async function renderReviews() {
     const container = document.getElementById('reviewsContainer');
-    const reviews = getApprovedReviews();
+    container.innerHTML = '<p style="text-align: center; color: #999; padding: 2rem;">Loading reviews...</p>';
+    
+    const reviews = await getApprovedReviews();
     
     if (reviews.length === 0) {
         container.innerHTML = `
@@ -63,8 +65,8 @@ function renderReviews() {
 }
 
 // Update stats
-function updateStats() {
-    const reviews = getApprovedReviews();
+async function updateStats() {
+    const reviews = await getApprovedReviews();
     const totalReviews = reviews.length;
     const avgRating = totalReviews > 0 
         ? (reviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews).toFixed(1)
@@ -77,7 +79,7 @@ function updateStats() {
 // User review submission
 const userReviewForm = document.getElementById('userReviewForm');
 if (userReviewForm) {
-    userReviewForm.addEventListener('submit', function(e) {
+    userReviewForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         
         const review = {
@@ -86,18 +88,26 @@ if (userReviewForm) {
             country: document.getElementById('userCountry').value,
             rating: parseInt(document.getElementById('userRating').value),
             text: document.getElementById('userReview').value,
-            date: new Date().toISOString(),
-            status: 'pending',
             source: 'user'
         };
         
-        const reviews = getReviews();
-        reviews.unshift(review);
-        saveReviews(reviews);
-        
-        userReviewForm.reset();
-        
-        alert('Thank you for your review! It will be published after admin approval.');
+        try {
+            const response = await fetch(`${API_BASE}/reviews`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(review)
+            });
+            const result = await response.json();
+            if (result.success) {
+                userReviewForm.reset();
+                alert('Thank you for your review! It will be published after admin approval.');
+            } else {
+                alert('Error submitting review: ' + result.error);
+            }
+        } catch (error) {
+            console.error('Error submitting review:', error);
+            alert('Error submitting review. Please try again.');
+        }
     });
 }
 

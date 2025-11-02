@@ -1,0 +1,84 @@
+================================================================================
+                    CEYORA HOLIDAYS - QUICK START GUIDE
+================================================================================
+
+🚀 FASTEST WAY TO DEPLOY (3 STEPS)
+================================================================================
+
+STEP 1: Open Command Prompt in this folder
+-------------------------------------------
+Right-click in this folder → "Open in Terminal" or "Open Command Prompt here"
+
+STEP 2: Run the deployment script
+----------------------------------
+Type: deploy.bat
+Press Enter
+Choose option 1 for first deployment
+
+STEP 3: Create KV Database
+---------------------------
+1. Go to: https://vercel.com/dashboard
+2. Click your project
+3. Click "Storage" → "Create Database" → "KV"
+4. Name it: ceyora-kv
+5. Run deploy.bat again, choose option 2
+
+DONE! Your website is live! 🎉
+
+================================================================================
+
+📖 NEED MORE DETAILS?
+================================================================================
+
+For complete instructions, see:
+- DEPLOYMENT.md (Full deployment guide)
+- CLIENT_HANDOVER.txt (Client handover checklist)
+- README.md (Technical documentation)
+
+================================================================================
+
+🔑 ADMIN ACCESS
+================================================================================
+
+URL: https://your-domain.vercel.app/admin-login.html
+Username: admin
+Password: ceyora2024
+
+⚠️ Change password before client handover!
+
+================================================================================
+
+✅ WHAT'S INCLUDED
+================================================================================
+
+✓ Complete website with 7 pages
+✓ Admin dashboard for content management
+✓ Persistent storage (Vercel KV)
+✓ Reviews carousel on homepage
+✓ Dynamic gallery on about page
+✓ Mobile responsive design
+✓ WhatsApp integration
+✓ All data persists after refresh
+
+================================================================================
+
+🆘 QUICK TROUBLESHOOTING
+================================================================================
+
+Problem: "vercel: command not found"
+Solution: Run: npm install -g vercel
+
+Problem: Images not persisting
+Solution: Make sure you created KV database in Step 3
+
+Problem: Can't login to admin
+Solution: Default password is "ceyora2024"
+
+================================================================================
+
+📞 SUPPORT
+================================================================================
+
+For detailed help, check DEPLOYMENT.md file in this folder.
+
+================================================================================

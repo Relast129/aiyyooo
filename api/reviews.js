@@ -1,0 +1,92 @@
+// Vercel Serverless Function for Reviews Management
+import { kv } from '@vercel/kv';
+
+export default async function handler(req, res) {
+  // Enable CORS
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
+  try {
+    if (req.method === 'GET') {
+      // Get all reviews or only approved ones
+      const { approved } = req.query;
+      const reviews = await kv.get('reviews') || [];
+      
+      if (approved === 'true') {
+        const approvedReviews = reviews.filter(r => r.status === 'approved');
+        return res.status(200).json({ success: true, data: approvedReviews });
+      }
+      
+      return res.status(200).json({ success: true, data: reviews });
+    }
+
+    if (req.method === 'POST') {
+      // Add new review
+      const { name, email, country, rating, text, source } = req.body;
+      
+      if (!name || !country || !rating || !text) {
+        return res.status(400).json({ success: false, error: 'Missing required fields' });
+      }
+
+      const reviews = await kv.get('reviews') || [];
+      const newReview = {
+        id: Date.now().toString(),
+        name,
+        email: email || '',
+        country,
+        rating: parseInt(rating),
+        text,
+        date: new Date().toISOString(),
+        status: source === 'admin' ? 'approved' : 'pending',
+        source: source || 'user'
+      };
+      
+      reviews.unshift(newReview);
+      await kv.set('reviews', reviews);
+      
+      return res.status(200).json({ success: true, data: newReview });
+    }
+
+    if (req.method === 'PUT') {
+      // Update review (approve/reject)
+      const { id, status } = req.body;
+      
+      if (!id || !status) {
+        return res.status(400).json({ success: false, error: 'Missing required fields' });
+      }
+
+      const reviews = await kv.get('reviews') || [];
+      const updatedReviews = reviews.map(review => 
+        review.id === id ? { ...review, status } : review
+      );
+      await kv.set('reviews', updatedReviews);
+      
+      return res.status(200).json({ success: true });
+    }
+
+    if (req.method === 'DELETE') {
+      // Delete review by ID
+      const { id } = req.body;
+      
+      if (!id) {
+        return res.status(400).json({ success: false, error: 'Missing review ID' });
+      }
+
+      const reviews = await kv.get('reviews') || [];
+      const filteredReviews = reviews.filter(review => review.id !== id);
+      await kv.set('reviews', filteredReviews);
+      
+      return res.status(200).json({ success: true });
+    }
+
+    return res.status(405).json({ success: false, error: 'Method not allowed' });
+  } catch (error) {
+    console.error('Reviews API Error:', error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+}

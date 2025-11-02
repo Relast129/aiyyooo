@@ -1,0 +1,135 @@
+================================================================================
+                    PUSH TO GITHUB REPOSITORY - INSTRUCTIONS
+================================================================================
+
+Follow these steps to push your code to GitHub:
+
+================================================================================
+OPTION 1: PUSH TO NEW REPOSITORY (If you don't have a repo yet)
+================================================================================
+
+STEP 1: Create a new repository on GitHub
+------------------------------------------
+1. Go to: https://github.com/new
+2. Repository name: ceyora-holidays (or your preferred name)
+3. Description: Ceyora Holidays - Sri Lanka Travel Website
+4. Choose: Public or Private
+5. DO NOT initialize with README (we already have files)
+6. Click "Create repository"
+
+STEP 2: Initialize Git and push (Run these commands)
+-----------------------------------------------------
+Open Command Prompt in this folder and run:
+
+git init
+git add .
+git commit -m "Initial commit - Complete Ceyora Holidays website"
+git branch -M main
+git remote add origin https://github.com/YOUR-USERNAME/ceyora-holidays.git
+git push -u origin main
+
+Replace YOUR-USERNAME with your actual GitHub username!
+
+================================================================================
+OPTION 2: PUSH TO EXISTING REPOSITORY
+================================================================================
+
+If you already have a repository, run:
+
+git remote add origin https://github.com/YOUR-USERNAME/REPO-NAME.git
+git add .
+git commit -m "Complete website with admin dashboard and persistent storage"
+git branch -M main
+git push -u origin main -f
+
+(The -f flag forces push if there are conflicts)
+
+================================================================================
+TROUBLESHOOTING
+================================================================================
+
+Problem: "git: command not found"
+Solution: Install Git from https://git-scm.com/download/win
+
+Problem: Authentication failed
+Solution: Use Personal Access Token instead of password
+1. Go to: https://github.com/settings/tokens
+2. Generate new token (classic)
+3. Select scopes: repo (all)
+4. Copy the token
+5. Use token as password when prompted
+
+Problem: "remote origin already exists"
+Solution: Run: git remote remove origin
+Then add it again with the correct URL
+
+Problem: Files not being added
+Solution: Check .gitignore file - some files might be excluded
+
+================================================================================
+VERIFY PUSH WAS SUCCESSFUL
+================================================================================
+
+After pushing, verify:
+1. Go to your GitHub repository URL
+2. Refresh the page
+3. You should see all your files
+4. Check that these folders exist:
+   - css/
+   - js/
+   - api/
+   - images/
+5. Check that these files exist:
+   - index.html
+   - admin-dashboard.html
+   - package.json
+   - vercel.json
+
+================================================================================
+IMPORTANT FILES TO VERIFY
+================================================================================
+
+Make sure these critical files are pushed:
+✓ package.json (contains @vercel/kv dependency)
+✓ vercel.json (Vercel configuration)
+✓ api/gallery.js (Gallery API endpoint)
+✓ api/reviews.js (Reviews API endpoint)
+✓ All HTML files
+✓ All CSS files
+✓ All JS files
+✓ DEPLOYMENT.md
+✓ README.md
+
+================================================================================
+CONNECT GITHUB TO VERCEL (RECOMMENDED)
+================================================================================
+
+After pushing to GitHub, you can deploy directly from GitHub:
+
+1. Go to: https://vercel.com/new
+2. Click "Import Git Repository"
+3. Select your GitHub repository
+4. Click "Import"
+5. Vercel will automatically deploy
+6. Create KV database in Vercel dashboard
+7. Redeploy
+
+Benefits:
+- Automatic deployments on every push
+- Easy rollbacks
+- Preview deployments for branches
+- Better collaboration
+
+================================================================================
+FUTURE UPDATES
+================================================================================
+
+To push updates later:
+
+git add .
+git commit -m "Description of changes"
+git push
+
+If connected to Vercel, it will auto-deploy!
+
+================================================================================
