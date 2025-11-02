@@ -1,5 +1,44 @@
 // Vercel Serverless Function for Reviews Management
-import { kv } from '@vercel/kv';
+// Uses Vercel Blob Store for persistent storage
+import { put, head } from '@vercel/blob';
+
+const REVIEWS_BLOB_PATH = 'reviews-data.json';
+
+// Helper to get reviews from Blob Store
+async function getReviews() {
+  try {
+    // Try to fetch existing reviews from Blob Store
+    const response = await fetch(`https://${process.env.BLOB_READ_WRITE_TOKEN?.split('_')[0]}.public.blob.vercel-storage.com/${REVIEWS_BLOB_PATH}`);
+    
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    }
+    
+    // If file doesn't exist yet, return empty array
+    return [];
+  } catch (error) {
+    console.log('Error fetching reviews from Blob, returning empty array:', error.message);
+    return [];
+  }
+}
+
+async function saveReviews(data) {
+  try {
+    // Save reviews as JSON to Blob Store
+    const blob = await put(REVIEWS_BLOB_PATH, JSON.stringify(data), {
+      access: 'public',
+      contentType: 'application/json',
+      addRandomSuffix: false // Keep consistent filename
+    });
+    
+    console.log('Reviews saved to Blob Store:', blob.url);
+    return true;
+  } catch (error) {
+    console.error('Error saving reviews to Blob:', error);
+    throw error;
+  }
+}
 
 export default async function handler(req, res) {
   // Enable CORS
@@ -15,7 +54,7 @@ export default async function handler(req, res) {
     if (req.method === 'GET') {
       // Get all reviews or only approved ones
       const { approved } = req.query;
-      const reviews = await kv.get('reviews') || [];
+      const reviews = await getReviews();
       
       if (approved === 'true') {
         const approvedReviews = reviews.filter(r => r.status === 'approved');
@@ -33,7 +72,7 @@ export default async function handler(req, res) {
         return res.status(400).json({ success: false, error: 'Missing required fields' });
       }
 
-      const reviews = await kv.get('reviews') || [];
+      const reviews = await getReviews();
       const newReview = {
         id: Date.now().toString(),
         name,
@@ -47,7 +86,7 @@ export default async function handler(req, res) {
       };
       
       reviews.unshift(newReview);
-      await kv.set('reviews', reviews);
+      await saveReviews(reviews);
       
       return res.status(200).json({ success: true, data: newReview });
     }
@@ -60,11 +99,11 @@ export default async function handler(req, res) {
         return res.status(400).json({ success: false, error: 'Missing required fields' });
       }
 
-      const reviews = await kv.get('reviews') || [];
+      const reviews = await getReviews();
       const updatedReviews = reviews.map(review => 
         review.id === id ? { ...review, status } : review
       );
-      await kv.set('reviews', updatedReviews);
+      await saveReviews(updatedReviews);
       
       return res.status(200).json({ success: true });
     }
@@ -77,9 +116,9 @@ export default async function handler(req, res) {
         return res.status(400).json({ success: false, error: 'Missing review ID' });
       }
 
-      const reviews = await kv.get('reviews') || [];
+      const reviews = await getReviews();
       const filteredReviews = reviews.filter(review => review.id !== id);
-      await kv.set('reviews', filteredReviews);
+      await saveReviews(filteredReviews);
       
       return res.status(200).json({ success: true });
     }

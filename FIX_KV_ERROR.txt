@@ -1,0 +1,163 @@
+================================================================================
+                    FIX: Missing KV Environment Variables
+================================================================================
+
+ERROR: @vercel/kv: Missing required environment variables KV_REST_API_URL 
+       and KV_REST_API_TOKEN
+
+This means the Vercel KV database hasn't been created yet.
+
+================================================================================
+                            SOLUTION (5 STEPS)
+================================================================================
+
+STEP 1: Deploy to Vercel First (if not already done)
+-----------------------------------------------------
+Open Command Prompt in your project folder and run:
+
+    vercel login
+    vercel
+
+This creates your project on Vercel.
+
+STEP 2: Go to Vercel Dashboard
+-------------------------------
+Open your browser and go to:
+https://vercel.com/dashboard
+
+STEP 3: Select Your Project
+----------------------------
+1. Find and click on your "aiyyooo" project (or ceyora-holidays)
+2. You should see your project overview
+
+STEP 4: Create KV Database
+---------------------------
+1. Click on the "Storage" tab at the top
+2. Click "Create Database" button
+3. Select "KV" (Key-Value Store)
+4. Name it: ceyora-kv (or any name you prefer)
+5. Select region: Choose closest to your users (e.g., Washington D.C.)
+6. Click "Create"
+
+STEP 5: Connect Database to Project
+------------------------------------
+1. After creating, you'll see "Connect to Project"
+2. Select your project from the dropdown
+3. Click "Connect"
+4. Vercel will automatically add the environment variables
+
+STEP 6: Redeploy Your Project (IMPORTANT!)
+-------------------------------------------
+After connecting the database, you MUST redeploy:
+
+    vercel --prod
+
+This ensures the environment variables are available to your project.
+
+================================================================================
+                            VERIFY IT WORKS
+================================================================================
+
+After redeploying:
+
+1. Go to your website: https://your-project.vercel.app/admin-login.html
+2. Login with: admin / admin@ceyora
+3. Try uploading an image
+4. It should work now! ✅
+
+If you refresh the page, the image should still be there (persistent storage).
+
+================================================================================
+                        ALTERNATIVE: LOCAL TESTING
+================================================================================
+
+If you want to test locally, you need to:
+
+1. Install Vercel CLI globally:
+   npm install -g vercel
+
+2. Link your local project to Vercel:
+   vercel link
+
+3. Pull environment variables:
+   vercel env pull
+
+4. Run locally:
+   vercel dev
+
+This will create a .env file with the KV credentials.
+
+================================================================================
+                            TROUBLESHOOTING
+================================================================================
+
+Problem: "Project not found on Vercel"
+Solution: Run 'vercel' first to deploy, then create KV database
+
+Problem: "Database created but still getting error"
+Solution: Make sure you clicked "Connect to Project" and redeployed
+
+Problem: "Environment variables not showing"
+Solution: Go to Project Settings → Environment Variables
+         You should see KV_REST_API_URL and KV_REST_API_TOKEN
+
+Problem: "Still not working after redeploy"
+Solution: 
+1. Check deployment logs: vercel logs
+2. Verify KV database is connected in Vercel dashboard
+3. Try: vercel --prod --force (force redeploy)
+
+================================================================================
+                        QUICK COMMAND REFERENCE
+================================================================================
+
+# Deploy to Vercel
+vercel
+
+# Deploy to production
+vercel --prod
+
+# Check deployment status
+vercel ls
+
+# View logs
+vercel logs
+
+# Link local project to Vercel
+vercel link
+
+# Pull environment variables
+vercel env pull
+
+================================================================================
+                            IMPORTANT NOTES
+================================================================================
+
+✓ KV database is FREE on Vercel (256 MB storage)
+✓ Environment variables are automatically injected after connecting
+✓ You MUST redeploy after creating/connecting the database
+✓ Local development requires 'vercel dev' to access KV
+✓ Production deployment works automatically after setup
+
+================================================================================
+                        STEP-BY-STEP VISUAL GUIDE
+================================================================================
+
+1. Vercel Dashboard → Projects → [Your Project]
+2. Click "Storage" tab
+3. Click "Create Database"
+4. Choose "KV"
+5. Name: ceyora-kv
+6. Click "Create"
+7. Click "Connect to Project"
+8. Select your project
+9. Click "Connect"
+10. Run: vercel --prod
+
+DONE! ✅
+
+================================================================================
+
+After following these steps, your image uploads will work and persist!
+
+================================================================================
