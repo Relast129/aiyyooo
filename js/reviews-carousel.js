@@ -3,11 +3,15 @@ const API_BASE = '/api';
 
 async function loadReviewsCarousel() {
     try {
+        console.log('Loading reviews carousel from API...');
         const response = await fetch(`${API_BASE}/reviews?approved=true`);
         const result = await response.json();
         
+        console.log('Reviews API response:', result);
+        
         if (result.success && result.data.length > 0) {
             const reviews = result.data.slice(0, 6); // Show max 6 reviews
+            console.log(`Found ${reviews.length} approved reviews for carousel`);
             
             // Create carousel HTML
             const carouselHTML = `
@@ -84,8 +88,13 @@ async function loadReviewsCarousel() {
             const callToAction = document.querySelector('.call-to-action');
             if (callToAction) {
                 callToAction.insertAdjacentHTML('beforebegin', carouselHTML);
+                console.log('Reviews carousel HTML inserted');
                 initCarousel();
+            } else {
+                console.warn('Call-to-action section not found, carousel not inserted');
             }
+        } else {
+            console.log('No approved reviews found for carousel');
         }
     } catch (error) {
         console.error('Error loading reviews carousel:', error);

@@ -1,0 +1,274 @@
+================================================================================
+                    TESTING GUIDE - AFTER DEPLOYMENT
+================================================================================
+
+After deploying to Vercel with Blob Store connected, follow these steps to test:
+
+================================================================================
+                            1. TEST ADMIN LOGIN
+================================================================================
+
+1. Go to: https://your-domain.vercel.app/admin-login.html
+2. Enter credentials:
+   - Username: admin
+   - Password: admin@ceyora
+3. Click "Login"
+4. ✅ Should redirect to admin-dashboard.html
+
+================================================================================
+                            2. TEST IMAGE UPLOAD
+================================================================================
+
+In Admin Dashboard:
+
+1. Click "Gallery Management" tab
+2. Click "Select Image" button
+3. Choose an image (JPG/PNG, under 10MB recommended)
+4. Enter a caption (e.g., "Beautiful Sigiriya Rock")
+5. Click "Upload Image"
+6. ✅ Should see success message
+7. ✅ Image should appear in the gallery list below
+
+Check Browser Console (F12):
+- Look for: "Image uploaded to Blob Store: https://..."
+- Should NOT see any errors
+
+================================================================================
+                            3. TEST IMAGE DISPLAY ON ABOUT PAGE
+================================================================================
+
+1. Open new tab: https://your-domain.vercel.app/about.html
+2. Scroll to "Our Tour Gallery" section
+3. ✅ Your uploaded image should appear at the TOP of the gallery
+4. ✅ Static images should still be visible below
+
+Check Browser Console (F12):
+- Look for: "Loading gallery images from API..."
+- Look for: "Found X images from API"
+- Look for: "Gallery images loaded successfully"
+- Should NOT see any errors
+
+If images don't appear:
+- Check console for errors
+- Verify Blob Store is connected in Vercel dashboard
+- Check that deployment has latest code
+
+================================================================================
+                            4. TEST REVIEW SUBMISSION (ADMIN)
+================================================================================
+
+In Admin Dashboard:
+
+1. Click "Reviews Management" tab
+2. Fill in the form:
+   - Name: John Smith
+   - Country: United States
+   - Rating: 5
+   - Review: "Amazing experience! Highly recommended."
+3. Click "Add Review"
+4. ✅ Should see success message
+5. ✅ Review should appear in the list below with "approved" status
+
+Check Browser Console (F12):
+- Look for: "Reviews saved to Blob Store: https://..."
+- Should NOT see any errors
+
+================================================================================
+                            5. TEST REVIEW DISPLAY ON REVIEWS PAGE
+================================================================================
+
+1. Open new tab: https://your-domain.vercel.app/reviews.html
+2. ✅ Your review should appear in the reviews grid
+3. ✅ Should show name, country, rating stars, and text
+
+Check Browser Console (F12):
+- Look for: "Loading reviews..."
+- Should NOT see any errors
+
+================================================================================
+                            6. TEST REVIEWS CAROUSEL ON HOMEPAGE
+================================================================================
+
+1. Open new tab: https://your-domain.vercel.app/
+2. Scroll down to "What Our Guests Say" section
+3. ✅ Should see your review in a card format
+4. ✅ Cards should auto-rotate every 5 seconds
+5. ✅ Navigation buttons should work
+
+Check Browser Console (F12):
+- Look for: "Loading reviews carousel from API..."
+- Look for: "Found X approved reviews for carousel"
+- Look for: "Reviews carousel HTML inserted"
+- Should NOT see any errors
+
+If carousel doesn't appear:
+- Make sure you have at least 1 approved review
+- Check console for errors
+- Verify reviews API is working
+
+================================================================================
+                            7. TEST USER REVIEW SUBMISSION
+================================================================================
+
+On Reviews Page:
+
+1. Scroll to "Share Your Experience" form
+2. Fill in:
+   - Name: Jane Doe
+   - Email: jane@example.com
+   - Country: Canada
+   - Rating: 5
+   - Review: "Wonderful tour!"
+3. Click "Submit Review"
+4. ✅ Should see: "Thank you for your review! It will be published after admin approval."
+
+In Admin Dashboard:
+5. Refresh the page
+6. ✅ Should see Jane's review with "pending" status
+7. Click "Approve" button
+8. ✅ Status should change to "approved"
+
+On Reviews Page:
+9. Refresh the page
+10. ✅ Jane's review should now appear
+
+================================================================================
+                            8. TEST IMAGE DELETION
+================================================================================
+
+In Admin Dashboard:
+
+1. Go to Gallery Management tab
+2. Find an uploaded image
+3. Click "Delete" button
+4. Confirm deletion
+5. ✅ Image should disappear from the list
+
+On About Page:
+6. Refresh the page
+7. ✅ Deleted image should no longer appear
+
+================================================================================
+                            9. TEST REVIEW DELETION
+================================================================================
+
+In Admin Dashboard:
+
+1. Go to Reviews Management tab
+2. Find a review
+3. Click "Delete" button
+4. Confirm deletion
+5. ✅ Review should disappear from the list
+
+On Reviews Page:
+6. Refresh the page
+7. ✅ Deleted review should no longer appear
+
+================================================================================
+                            10. TEST DATA PERSISTENCE
+================================================================================
+
+1. Upload an image
+2. Add a review
+3. Close browser completely
+4. Open browser again
+5. Go to About page
+6. ✅ Image should still be there
+7. Go to Reviews page
+8. ✅ Review should still be there
+
+This confirms Blob Store is working correctly!
+
+================================================================================
+                            11. VERIFY BLOB STORE
+================================================================================
+
+In Vercel Dashboard:
+
+1. Go to: https://vercel.com/dashboard
+2. Click your project
+3. Click "Storage" tab
+4. Click on your Blob Store
+5. ✅ Should see files:
+   - gallery-metadata.json
+   - reviews-data.json
+   - gallery-*.jpg files
+
+Click on any file to view/download it.
+
+================================================================================
+                            COMMON ISSUES & FIXES
+================================================================================
+
+Problem: "Missing BLOB_READ_WRITE_TOKEN"
+Fix: Create Blob Store in Vercel dashboard and connect to project
+
+Problem: Images upload but don't appear on About page
+Fix: 
+- Check browser console for errors
+- Verify gallery-loader.js is loaded
+- Check API response in Network tab
+
+Problem: Reviews don't appear on homepage carousel
+Fix:
+- Make sure reviews are "approved" status
+- Check that reviews-carousel.js is loaded
+- Verify call-to-action section exists on homepage
+
+Problem: Data doesn't persist after refresh
+Fix:
+- Verify Blob Store is connected
+- Check Vercel logs for API errors
+- Redeploy: vercel --prod
+
+Problem: Upload fails with 500 error
+Fix:
+- Check Vercel function logs
+- Verify Blob Store has available space
+- Check image size (keep under 10MB)
+
+================================================================================
+                            SUCCESS CRITERIA
+================================================================================
+
+✅ Admin can login
+✅ Admin can upload images
+✅ Images appear on About page
+✅ Images persist after refresh
+✅ Admin can add reviews
+✅ Users can submit reviews
+✅ Admin can approve reviews
+✅ Reviews appear on Reviews page
+✅ Reviews appear on Homepage carousel
+✅ Reviews persist after refresh
+✅ Carousel auto-rotates
+✅ Admin can delete images/reviews
+✅ All data stored in Blob Store
+
+If all above work, your website is 100% functional! 🎉
+
+================================================================================
+                            BROWSER CONSOLE TIPS
+================================================================================
+
+To open browser console:
+- Chrome/Edge: Press F12 or Ctrl+Shift+I
+- Firefox: Press F12 or Ctrl+Shift+K
+- Safari: Cmd+Option+I
+
+Look for:
+✅ Green/blue messages = Success
+❌ Red messages = Errors
+⚠️ Yellow messages = Warnings
+
+Key messages to look for:
+- "Image uploaded to Blob Store: ..."
+- "Gallery images loaded successfully"
+- "Reviews saved to Blob Store: ..."
+- "Found X approved reviews for carousel"
+
+================================================================================
+
+Happy Testing! 🚀
+
+================================================================================
