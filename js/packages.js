@@ -6,7 +6,7 @@ const packages = [
         duration: "7 Days",
         subtitle: "Focus: Heritage, Temples, Ancient Cities | Ideal For: Families, Solo Travelers, Couples, Culture Lovers",
         priceOriginal: 520,
-        priceCurrent: 470,
+        priceCurrent: 375,
         transport: [
             "A/C Private vehicle + driver for 7 days",
             "Fuel, tolls, parking included",
@@ -176,7 +176,7 @@ const packages = [
         duration: "10 Days",
         subtitle: "Travel by eco-friendly Toyota Prius with a knowledgeable guide. Ideal for individuals or small groups seeking comfortable, hassle-free transport.",
         priceOriginal: 750,
-        priceCurrent: 700,
+        priceCurrent: 535,
         transport: [
             "Eco-friendly travel in a comfortable Toyota Prius",
             "Experienced local guide for smooth transfers and insider tips",
