@@ -392,6 +392,116 @@
     background: #218838;
 }
 
+/* Packages Management Styles */
+.packages-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.package-item {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    border-left: 4px solid var(--primary);
+    transition: all 0.3s ease;
+}
+
+.package-item.inactive {
+    opacity: 0.6;
+    border-left-color: #6c757d;
+}
+
+.package-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 1rem;
+    gap: 1rem;
+}
+
+.package-item h3 {
+    font-size: 1.2rem;
+    color: var(--dark);
+    margin: 0 0 0.5rem 0;
+}
+
+.package-meta {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.badge-small {
+    background: var(--accent);
+    color: var(--dark);
+    padding: 0.2rem 0.6rem;
+    border-radius: 0.4rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.status-active {
+    background: #d4edda;
+    color: #155724;
+    padding: 0.2rem 0.6rem;
+    border-radius: 0.4rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.status-inactive {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 0.2rem 0.6rem;
+    border-radius: 0.4rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.package-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.package-item-details {
+    color: var(--text);
+    line-height: 1.6;
+}
+
+.package-item-details p {
+    margin: 0.5rem 0;
+}
+
+.btn-warning {
+    background: #ffc107;
+    color: #000;
+}
+
+.btn-warning:hover {
+    background: #e0a800;
+}
+
+.btn-success {
+    background: #28a745;
+    color: white;
+}
+
+.btn-success:hover {
+    background: #218838;
+}
+
+.empty-message {
+    text-align: center;
+    color: var(--text-light);
+    padding: 2rem;
+    font-style: italic;
+}
+
 @media (max-width: 768px) {
     .form-row {
         grid-template-columns: 1fr;
@@ -403,5 +513,17 @@
     
     .gallery-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .package-item-header {
+        flex-direction: column;
+    }
+    
+    .package-actions {
+        width: 100%;
+    }
+    
+    .package-actions .btn {
+        flex: 1;
     }
 }

@@ -1,5 +1,8 @@
-// Tour Packages Data
-const packages = [
+// Tour Packages - Load from API
+const API_BASE = '/api';
+
+// Default packages (fallback)
+const defaultPackages = [
     {
         id: 1,
         title: "🚗 Cultural Explorer – Heritage Tour",
@@ -242,10 +245,34 @@ const packages = [
     }
 ];
 
+// Load packages from API
+async function loadPackages() {
+    try {
+        console.log('Loading packages from API...');
+        const response = await fetch(`${API_BASE}/packages?active=true`);
+        const result = await response.json();
+        
+        console.log('Packages API response:', result);
+        
+        if (result.success && result.data && result.data.length > 0) {
+            console.log(`Found ${result.data.length} active packages`);
+            renderPackages(result.data);
+        } else {
+            console.log('No packages from API, using defaults');
+            renderPackages(defaultPackages);
+        }
+    } catch (error) {
+        console.error('Error loading packages:', error);
+        renderPackages(defaultPackages);
+    }
+}
+
 // Render packages
-function renderPackages() {
+function renderPackages(packages) {
     const container = document.getElementById('packages-container');
     if (!container) return;
+    
+    container.innerHTML = ''; // Clear existing content
     
     packages.forEach(pkg => {
         const packageHTML = `
@@ -327,4 +354,4 @@ function renderPackages() {
 }
 
 // Initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', renderPackages);
+document.addEventListener('DOMContentLoaded', loadPackages);

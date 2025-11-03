@@ -43,6 +43,13 @@
                     </svg>
                     Reviews Management
                 </button>
+                <button class="admin-tab" data-tab="packages">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    Packages Management
+                </button>
             </div>
             
             <!-- Gallery Management Tab -->
@@ -119,10 +126,91 @@
                     <div id="reviewsList" class="reviews-list"></div>
                 </div>
             </div>
+            
+            <!-- Packages Management Tab -->
+            <div id="packagesTab" class="admin-tab-content">
+                <div class="admin-section">
+                    <h2>Add New Package</h2>
+                    <form id="addPackageForm" class="upload-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="packageName">Package Name *</label>
+                                <input type="text" id="packageName" placeholder="e.g., Cultural Heritage Tour" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="packageDuration">Duration *</label>
+                                <input type="text" id="packageDuration" placeholder="e.g., 7 Days / 6 Nights" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="packagePrice">Current Price *</label>
+                                <input type="text" id="packagePrice" placeholder="e.g., $899" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="packageOriginalPrice">Original Price</label>
+                                <input type="text" id="packageOriginalPrice" placeholder="e.g., $1,199">
+                            </div>
+                            <div class="form-group">
+                                <label for="packageDiscount">Discount Badge</label>
+                                <input type="text" id="packageDiscount" placeholder="e.g., 25% OFF">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="packageDescription">Description *</label>
+                            <textarea id="packageDescription" rows="3" placeholder="Brief package description" required></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="packageHighlights">Highlights (one per line) *</label>
+                            <textarea id="packageHighlights" rows="4" placeholder="Visit 8 UNESCO World Heritage Sites&#10;Traditional dance performances&#10;Local cuisine experiences" required></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="packageIncluded">What's Included (one per line) *</label>
+                            <textarea id="packageIncluded" rows="4" placeholder="Accommodation in 4-star hotels&#10;All meals (breakfast, lunch, dinner)&#10;Air-conditioned transportation" required></textarea>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="packageBadge">Badge</label>
+                                <input type="text" id="packageBadge" placeholder="e.g., Most Popular, Adventure">
+                            </div>
+                            <div class="form-group">
+                                <label for="packageSeason">Season</label>
+                                <input type="text" id="packageSeason" placeholder="e.g., All Year, Winter Only" value="All Year">
+                            </div>
+                            <div class="form-group">
+                                <label for="packageActive">Status</label>
+                                <select id="packageActive">
+                                    <option value="true">Active (Visible)</option>
+                                    <option value="false">Inactive (Hidden)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            Add Package
+                        </button>
+                    </form>
+                </div>
+                
+                <div class="admin-section">
+                    <h2>All Packages</h2>
+                    <div id="packagesList" class="packages-list"></div>
+                </div>
+            </div>
         </div>
-    </main>
+    </div>
     
     <script src="js/admin-auth.js"></script>
     <script src="js/admin-dashboard.js"></script>
+    <script src="js/admin-packages.js"></script>
 </body>
 </html>
