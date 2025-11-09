@@ -1,302 +1,65 @@
-# Ceyora Holidays - Complete Deployment Guide
+# Deployment Instructions
 
-## 🚀 Quick Start - Deploy to Vercel (Recommended)
+## Prerequisites
 
-This website uses **Vercel KV** for persistent storage of gallery images and reviews. Follow these steps to deploy:
+- A static hosting provider (GitHub Pages, Netlify, Vercel, or similar)
+- Basic understanding of file management
 
-### Step 1: Install Vercel CLI (if not already installed)
+## Deployment Options
 
-```bash
-npm install -g vercel
-```
+### Option 1: GitHub Pages
 
-### Step 2: Deploy to Vercel
+1. Create a new repository on GitHub
+2. Upload all files from the `static-website` directory to the repository
+3. Go to repository Settings > Pages
+4. Select the branch containing your files (usually main)
+5. Your site will be available at `https://[username].github.io/[repository-name]/`
 
-```bash
-# Navigate to the project directory
-cd "c:\Users\ramzy\Downloads\ceyora html"
+### Option 2: Netlify
 
-# Login to Vercel (opens browser)
-vercel login
+1. Go to [Netlify](https://netlify.com)
+2. Sign up or log in to your account
+3. Drag and drop the entire `static-website` folder to the deployment area
+4. Netlify will automatically deploy your site and provide a URL
 
-# Deploy the project
-vercel
-```
+### Option 3: Vercel
 
-Follow the prompts:
-- **Set up and deploy?** Yes
-- **Which scope?** Select your account
-- **Link to existing project?** No (for first deployment)
-- **Project name?** ceyora-holidays (or your preferred name)
-- **Directory?** ./ (current directory)
-- **Override settings?** No
+1. Go to [Vercel](https://vercel.com)
+2. Sign up or log in to your account
+3. Import the `static-website` folder as a new project
+4. Vercel will automatically detect it as a static site and deploy it
 
-### Step 3: Set Up Vercel KV Database
+### Option 4: Traditional Web Hosting
 
-1. Go to your Vercel Dashboard: https://vercel.com/dashboard
-2. Select your **ceyora-holidays** project
-3. Go to **Storage** tab
-4. Click **Create Database**
-5. Select **KV** (Key-Value Store)
-6. Name it: `ceyora-kv` or any name you prefer
-7. Click **Create**
-8. Vercel will automatically connect the KV database to your project
+1. Upload all files from the `static-website` directory to your web server's public directory
+2. Ensure all files are accessible via HTTP
+3. Your site will be available at your domain
 
-### Step 4: Redeploy (Important!)
+## Post-Deployment Checklist
 
-After creating the KV database, redeploy to connect it:
+- [ ] Verify all pages load correctly
+- [ ] Test all navigation links
+- [ ] Check WhatsApp links open correctly
+- [ ] Verify mobile responsiveness
+- [ ] Confirm social media links work
+- [ ] Test contact form functionality
+- [ ] Check that all images load properly
 
-```bash
-vercel --prod
-```
+## Custom Domain Setup
 
-Your website is now live with persistent storage! 🎉
+If you want to use a custom domain:
 
----
+1. Purchase a domain from a registrar (GoDaddy, Namecheap, etc.)
+2. Point your domain's DNS records to your hosting provider
+3. Update any absolute URLs in the code to use your custom domain
+4. Update the sitemap.xml with your custom domain
 
-## 📋 Features Implemented
+## Updates and Maintenance
 
-### ✅ Admin Dashboard
-- **URL:** `https://your-domain.vercel.app/admin-login.html`
-- **Default Password:** `ceyora2024` (change in `js/admin-auth.js`)
-- Upload gallery images (max 4MB each)
-- Add/approve/delete reviews
-- All data persists in Vercel KV database
+To update your website:
 
-### ✅ Gallery Management
-- Admin uploads appear automatically in About page
-- Images stored in Vercel KV (persist after refresh)
-- Lightbox view for full-size images
+1. Make changes to the HTML, CSS, or JavaScript files
+2. Re-upload the modified files to your hosting provider
+3. Clear your browser cache to see the changes immediately
 
-### ✅ Reviews System
-- Visitors can submit reviews (pending approval)
-- Admin can approve/reject reviews
-- Approved reviews show on:
-  - Reviews page
-  - Homepage carousel (rotating cards)
-- All reviews persist in database
-
-### ✅ Homepage Reviews Carousel
-- Auto-rotating review cards
-- Shows latest 6 approved reviews
-- Responsive design (3 cards → 2 → 1)
-- Manual navigation buttons
-
----
-
-## 🔐 Admin Access
-
-**Login URL:** `https://your-domain.vercel.app/admin-login.html`
-
-**Default Credentials:**
-- Username: `admin`
-- Password: `ceyora2024`
-
-**To Change Password:**
-Edit `js/admin-auth.js` line 3:
-```javascript
-const ADMIN_PASSWORD = 'your-new-password';
-```
-
----
-
-## 📱 Testing Checklist
-
-After deployment, test these features:
-
-### Public Pages
-- [ ] Homepage loads correctly
-- [ ] Reviews carousel displays and rotates
-- [ ] About page shows gallery images
-- [ ] Reviews page displays approved reviews
-- [ ] Packages page works
-- [ ] Contact page works
-- [ ] All WhatsApp buttons open correctly
-- [ ] Mobile menu works on small screens
-- [ ] Social media links work
-
-### Admin Features
-- [ ] Can login to admin dashboard
-- [ ] Can upload gallery images
-- [ ] Images appear in About page gallery
-- [ ] Can add admin reviews
-- [ ] Can approve user reviews
-- [ ] Can delete reviews
-- [ ] Reviews appear on homepage carousel
-- [ ] Data persists after page refresh
-
----
-
-## 🛠️ Configuration
-
-### Update Contact Information
-
-Edit these files to update contact details:
-
-**Phone Numbers:**
-- `index.html` - Search for `94772885558` and `94768118780`
-- `about.html` - Same phone numbers
-- `contact.html` - Same phone numbers
-
-**Email:**
-- Search for `aklaabulkalam01@gmail.com` in all HTML files
-
-**Social Media:**
-- Facebook: `https://www.facebook.com/CeyoraHoliday`
-- Instagram: `https://www.instagram.com/_ceyora_holidays_`
-- TikTok: `https://www.tiktok.com/@Ceyora_Holidays`
-
-### Update Admin Password
-
-Edit `js/admin-auth.js`:
-```javascript
-const ADMIN_PASSWORD = 'your-secure-password';
-```
-
----
-
-## 🌐 Custom Domain Setup
-
-### Option 1: Vercel Domain
-1. Go to Project Settings → Domains
-2. Add your custom domain
-3. Follow DNS configuration instructions
-4. Vercel provides free SSL certificate
-
-### Option 2: Update Domain in Code
-If using custom domain, update:
-- `sitemap.xml` - Replace URLs with your domain
-- Any hardcoded URLs in HTML files
-
----
-
-## 📊 Vercel KV Storage Limits
-
-**Free Plan:**
-- 256 MB storage
-- 3,000 commands per day
-- Sufficient for ~50-100 high-quality images
-- Unlimited reviews (text only)
-
-**Pro Plan (if needed):**
-- 1 GB storage
-- 100,000 commands per day
-
----
-
-## 🔄 Making Updates
-
-### Update Website Content
-1. Edit HTML/CSS/JS files locally
-2. Run `vercel --prod` to deploy changes
-3. Changes go live in ~30 seconds
-
-### Backup Data
-Vercel KV data is automatically backed up, but you can also:
-1. Export reviews/images from admin dashboard
-2. Store backup locally
-3. Re-import if needed
-
----
-
-## 🐛 Troubleshooting
-
-### Images Not Showing After Upload
-- **Issue:** Vercel KV not connected
-- **Fix:** Create KV database in Vercel dashboard, then redeploy
-
-### Reviews Not Persisting
-- **Issue:** API endpoints not working
-- **Fix:** Ensure `vercel.json` is present and redeploy
-
-### Admin Login Not Working
-- **Issue:** Password incorrect
-- **Fix:** Check `js/admin-auth.js` for correct password
-
-### 404 Errors on Routes
-- **Issue:** Vercel routing not configured
-- **Fix:** `vercel.json` should handle this automatically
-
----
-
-## 📞 Support & Maintenance
-
-### For Client Handover
-
-**Admin Access:**
-- URL: `https://[your-domain]/admin-login.html`
-- Username: `admin`
-- Password: `ceyora2024` (or updated password)
-
-**What Client Can Do:**
-1. Upload new gallery images
-2. Add testimonials/reviews
-3. Approve visitor reviews
-4. Delete inappropriate content
-
-**What Client Cannot Change (needs developer):**
-- Page layouts and design
-- Contact information
-- Navigation structure
-- Package details
-
-### Monthly Maintenance
-- Check for broken links
-- Update gallery with new tour photos
-- Moderate and approve reviews
-- Monitor Vercel KV storage usage
-
----
-
-## 🎯 Production Ready Checklist
-
-Before client handover:
-
-- [x] Vercel KV database configured
-- [x] All API endpoints working
-- [x] Gallery images persist after refresh
-- [x] Reviews persist after refresh
-- [x] Homepage carousel displays reviews
-- [x] Admin dashboard fully functional
-- [x] Mobile responsive design
-- [x] WhatsApp integration working
-- [x] Social media links verified
-- [ ] Custom domain configured (if applicable)
-- [ ] Admin password changed from default
-- [ ] Client trained on admin dashboard
-- [ ] Backup procedure documented
-
----
-
-## 📝 Notes
-
-- **Image Size Limit:** 4MB per image (Vercel KV limit)
-- **Recommended Image Format:** JPEG, optimized for web
-- **Review Moderation:** All user reviews require admin approval
-- **Data Persistence:** All data stored in Vercel KV (survives deployments)
-- **Cost:** Free tier sufficient for small-medium traffic
-
----
-
-## 🚀 Deploy Commands Reference
-
-```bash
-# First time deployment
-vercel
-
-# Production deployment
-vercel --prod
-
-# Check deployment status
-vercel ls
-
-# View logs
-vercel logs
-
-# Remove deployment
-vercel remove [deployment-url]
-```
-
----
-
-**Website is now production-ready and can be handed over to the client!** 🎉
+For significant updates, consider version controlling your changes with Git.

@@ -63,33 +63,60 @@ A fully responsive, mobile-friendly static website for Ceyora Holidays, showcasi
 - Newsletter signup (redirects to WhatsApp)
 - Social media links
 
-### Update Contact Information
+## WhatsApp Integration
 
-**Phone Numbers** (Search and replace in all HTML files):
-- `94772885558` → Your WhatsApp number
-- `94768118780` → Your phone number
+All communication and booking requests are directed to WhatsApp:
 
-**Email:**
-- `aklaabulkalam01@gmail.com` → Your email
+- **Number**: +94 76 811 8780
+- **Pre-filled Messages**: Context-specific messages for different sections
+- **24/7 Availability**: Always accessible for instant booking
 
-**Social Media:**
-- Facebook: `https://www.facebook.com/CeyoraHoliday`
-- Instagram: `https://www.instagram.com/_ceyora_holidays_`
-- TikTok: `https://www.tiktok.com/@Ceyora_Holidays`
+## Deployment
 
-### Change Admin Password
+The website is ready for deployment to any static hosting provider:
 
-Edit `js/admin-auth.js`:
-```javascript
-const ADMIN_PASSWORD = 'your-secure-password-here';
-```
+- GitHub Pages
+- Netlify
+- Vercel
+- Traditional web hosting
 
-Then redeploy:
-```bash
-vercel --prod
-```
+See `DEPLOYMENT.md` for detailed instructions.
 
----
+## Mobile Responsiveness
+
+The website is fully optimized for all devices:
+
+- Flexible grid layouts
+- Media queries for different screen sizes
+- Touch-friendly navigation
+- Optimized images and assets
+- Fast loading times on mobile networks
+
+## Customization
+
+To customize the website:
+
+1. Update contact information in HTML files
+2. Replace images in the `images` directory
+3. Modify colors in `css/style.css` (variables at the top)
+4. Update WhatsApp messages as needed
+
+## SEO Optimization
+
+- Semantic HTML structure
+- Proper meta tags and descriptions
+- XML sitemap included
+- Robots.txt for search engine crawling
+- Fast loading times
+- Mobile-friendly design
+
+## Performance
+
+- Lightweight assets
+- Optimized images
+- Efficient CSS and JavaScript
+- No external dependencies
+- Fast loading times
 
 ## Browser Support
 

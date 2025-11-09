@@ -13,6 +13,7 @@ function isLoggedIn() {
 function login(username, password) {
     if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
         sessionStorage.setItem('adminLoggedIn', 'true');
+        sessionStorage.setItem('adminAuthenticated', 'true');
         return true;
     }
     return false;
@@ -21,11 +22,12 @@ function login(username, password) {
 // Logout function
 function logout() {
     sessionStorage.removeItem('adminLoggedIn');
+    sessionStorage.removeItem('adminAuthenticated');
     window.location.href = 'admin-login.html';
 }
 
 // Protect admin pages
-if (window.location.pathname.includes('admin-dashboard')) {
+if (window.location.pathname.includes('admin-dashboard') || window.location.pathname.includes('dashboard.html')) {
     if (!isLoggedIn()) {
         window.location.href = 'admin-login.html';
     }
@@ -34,7 +36,7 @@ if (window.location.pathname.includes('admin-dashboard')) {
 // Redirect if already logged in
 if (window.location.pathname.includes('admin-login')) {
     if (isLoggedIn()) {
-        window.location.href = 'admin-dashboard.html';
+        window.location.href = 'dashboard.html';
     }
 }
 
@@ -49,7 +51,7 @@ if (loginForm) {
         const errorMessage = document.getElementById('errorMessage');
         
         if (login(username, password)) {
-            window.location.href = 'admin-dashboard.html';
+            window.location.href = 'dashboard.html';
         } else {
             errorMessage.textContent = 'Invalid username or password';
             errorMessage.style.display = 'block';
