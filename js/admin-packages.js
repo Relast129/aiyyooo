@@ -1,8 +1,20 @@
 // Admin Packages Management
 const API_BASE = '/api';
 
-// Add Package Form Handler
-document.getElementById('addPackageForm')?.addEventListener('submit', async (e) => {
+// Initialize packages management
+window.initializePackagesManagement = function() {
+    // Setup form handler
+    const form = document.getElementById('addPackageForm');
+    if (form) {
+        form.addEventListener('submit', handleAddPackage);
+    }
+    
+    // Load packages
+    loadPackages();
+};
+
+// Handle add package
+async function handleAddPackage(e) {
     e.preventDefault();
     
     const packageData = {
@@ -39,7 +51,7 @@ document.getElementById('addPackageForm')?.addEventListener('submit', async (e) 
         console.error('Error adding package:', error);
         alert('Error adding package. Please try again.');
     }
-});
+}
 
 // Load and display packages
 async function loadPackages() {
@@ -274,19 +286,14 @@ function resetForm() {
     };
 }
 
-// Load packages when packages tab is opened
+// Auto-initialize if packages list exists on page load (for old admin-dashboard.html compatibility)
 document.addEventListener('DOMContentLoaded', () => {
-    // Load packages if on packages tab
-    if (document.getElementById('packagesList')) {
+    if (document.getElementById('packagesList') && !document.getElementById('galleryPage')) {
+        // This is the old admin-dashboard.html, initialize normally
+        const form = document.getElementById('addPackageForm');
+        if (form) {
+            form.addEventListener('submit', handleAddPackage);
+        }
         loadPackages();
     }
-    
-    // Also load when tab is switched
-    document.querySelectorAll('.admin-tab').forEach(tab => {
-        tab.addEventListener('click', () => {
-            if (tab.dataset.tab === 'packages') {
-                loadPackages();
-            }
-        });
-    });
 });

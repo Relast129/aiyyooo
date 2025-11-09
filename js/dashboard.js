@@ -85,6 +85,21 @@ function loadPageData(pageName) {
         case 'overview':
             loadDashboardData();
             break;
+        case 'gallery':
+            if (typeof loadGalleryContent === 'function') {
+                loadGalleryContent();
+            }
+            break;
+        case 'reviews':
+            if (typeof loadReviewsContent === 'function') {
+                loadReviewsContent();
+            }
+            break;
+        case 'packages':
+            if (typeof loadPackagesManagement === 'function') {
+                loadPackagesManagement();
+            }
+            break;
         case 'analytics':
             loadAnalyticsData();
             break;

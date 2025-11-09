@@ -3,12 +3,10 @@
 
 const API_BASE = '/api';
 
-// Initialize content when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    loadGalleryContent();
-    loadReviewsContent();
-    loadPackagesContent();
-});
+// Make functions globally available
+window.loadGalleryContent = loadGalleryContent;
+window.loadReviewsContent = loadReviewsContent;
+window.loadPackagesManagement = loadPackagesManagement;
 
 // Load Gallery Management Content
 function loadGalleryContent() {
@@ -459,7 +457,7 @@ window.deleteReview = async function(id) {
 };
 
 // Load Packages Management Content
-function loadPackagesContent() {
+function loadPackagesManagement() {
     const packagesPage = document.getElementById('packagesPage');
     if (!packagesPage) return;
     
@@ -467,13 +465,83 @@ function loadPackagesContent() {
         <div class="management-section">
             <div class="section-card">
                 <div class="section-header">
-                    <h2>Package Management</h2>
-                    <p class="section-subtitle">Create and manage tour packages</p>
+                    <h2>Add New Package</h2>
+                    <p class="section-subtitle">Create tour packages for your website</p>
                 </div>
-                <p style="text-align: center; padding: 2rem; color: var(--text-secondary);">
-                    Package management content will be loaded here by admin-packages.js
-                </p>
+                <form id="addPackageForm" class="modern-form">
+                    <div class="form-grid">
+                        <div class="form-field">
+                            <label for="packageName">Package Name *</label>
+                            <input type="text" id="packageName" placeholder="e.g., Cultural Heritage Tour" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="packageDuration">Duration *</label>
+                            <input type="text" id="packageDuration" placeholder="e.g., 7 Days / 6 Nights" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="packagePrice">Current Price *</label>
+                            <input type="text" id="packagePrice" placeholder="e.g., $899" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="packageOriginalPrice">Original Price</label>
+                            <input type="text" id="packageOriginalPrice" placeholder="e.g., $1,199">
+                        </div>
+                        <div class="form-field">
+                            <label for="packageDiscount">Discount Badge</label>
+                            <input type="text" id="packageDiscount" placeholder="e.g., 25% OFF">
+                        </div>
+                        <div class="form-field">
+                            <label for="packageBadge">Badge</label>
+                            <input type="text" id="packageBadge" placeholder="e.g., Most Popular, Adventure">
+                        </div>
+                        <div class="form-field full-width">
+                            <label for="packageDescription">Description *</label>
+                            <textarea id="packageDescription" rows="3" placeholder="Brief package description" required></textarea>
+                        </div>
+                        <div class="form-field full-width">
+                            <label for="packageHighlights">Highlights (one per line) *</label>
+                            <textarea id="packageHighlights" rows="4" placeholder="Visit 8 UNESCO World Heritage Sites&#10;Traditional dance performances&#10;Local cuisine experiences" required></textarea>
+                        </div>
+                        <div class="form-field full-width">
+                            <label for="packageIncluded">What's Included (one per line) *</label>
+                            <textarea id="packageIncluded" rows="4" placeholder="Accommodation in 4-star hotels&#10;All meals (breakfast, lunch, dinner)&#10;Air-conditioned transportation" required></textarea>
+                        </div>
+                        <div class="form-field">
+                            <label for="packageSeason">Season</label>
+                            <input type="text" id="packageSeason" placeholder="e.g., All Year, Winter Only" value="All Year">
+                        </div>
+                        <div class="form-field">
+                            <label for="packageActive">Status</label>
+                            <select id="packageActive">
+                                <option value="true">Active (Visible)</option>
+                                <option value="false">Inactive (Hidden)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Add Package
+                    </button>
+                </form>
+            </div>
+            
+            <div class="section-card">
+                <div class="section-header">
+                    <h2>All Packages</h2>
+                    <p class="section-subtitle">Manage your tour packages</p>
+                </div>
+                <div id="packagesList" class="packages-list">
+                    <div class="loading-spinner">Loading...</div>
+                </div>
             </div>
         </div>
     `;
+    
+    // Reinitialize packages management
+    if (typeof initializePackagesManagement === 'function') {
+        initializePackagesManagement();
+    }
 }
