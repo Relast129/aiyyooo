@@ -1,8 +1,5 @@
 // Admin Packages Management
-// Use existing API_BASE or create it
-if (typeof API_BASE === 'undefined') {
-    var API_BASE = '/api';
-}
+// Don't redeclare API_BASE - use the global one
 
 // Initialize packages management
 window.initializePackagesManagement = function() {

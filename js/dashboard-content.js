@@ -1,10 +1,7 @@
 // Dashboard Content Loader
 // This script loads the management sections into the new dashboard
 
-// Use existing API_BASE or create it
-if (typeof API_BASE === 'undefined') {
-    var API_BASE = '/api';
-}
+// Don't redeclare API_BASE - use the global one from dashboard.js
 
 // Load Gallery Management Content
 function loadGalleryContent() {
