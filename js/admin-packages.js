@@ -1,5 +1,8 @@
 // Admin Packages Management
-const API_BASE = '/api';
+// Use existing API_BASE or create it
+if (typeof API_BASE === 'undefined') {
+    var API_BASE = '/api';
+}
 
 // Initialize packages management
 window.initializePackagesManagement = function() {

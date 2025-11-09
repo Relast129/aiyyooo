@@ -1,12 +1,10 @@
 // Dashboard Content Loader
 // This script loads the management sections into the new dashboard
 
-const API_BASE = '/api';
-
-// Make functions globally available
-window.loadGalleryContent = loadGalleryContent;
-window.loadReviewsContent = loadReviewsContent;
-window.loadPackagesManagement = loadPackagesManagement;
+// Use existing API_BASE or create it
+if (typeof API_BASE === 'undefined') {
+    var API_BASE = '/api';
+}
 
 // Load Gallery Management Content
 function loadGalleryContent() {
@@ -545,3 +543,8 @@ function loadPackagesManagement() {
         initializePackagesManagement();
     }
 }
+
+// Make functions globally available
+window.loadGalleryContent = loadGalleryContent;
+window.loadReviewsContent = loadReviewsContent;
+window.loadPackagesManagement = loadPackagesManagement;
