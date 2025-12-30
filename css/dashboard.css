@@ -1,22 +1,25 @@
 /* Dashboard Variables */
 :root {
-    --dashboard-bg: #0f1419;
-    --sidebar-bg: #1a1f2e;
-    --card-bg: #1e2433;
+    --dashboard-bg: #0a0e1a;
+    --sidebar-bg: #141b2d;
+    --card-bg: #1a2332;
     --border-color: #2d3548;
     --text-primary: #ffffff;
-    --text-secondary: #8b92a7;
-    --text-muted: #6b7280;
-    --primary: #00a896;
-    --primary-dark: #008577;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --primary: #00d9b8;
+    --primary-dark: #00a896;
+    --primary-light: #00f5d4;
     --success: #10b981;
     --warning: #f59e0b;
     --danger: #ef4444;
     --info: #3b82f6;
     --accent: #f9c80e;
-    --hover-bg: #252b3b;
-    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+    --hover-bg: #1e2738;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+    --glow-primary: 0 0 20px rgba(0, 217, 184, 0.3);
+    --glow-success: 0 0 20px rgba(16, 185, 129, 0.3);
 }
 
 * {
@@ -104,7 +107,8 @@
 .nav-item.active {
     background: linear-gradient(135deg, var(--primary), var(--primary-dark));
     color: white;
-    box-shadow: 0 4px 12px rgba(0, 168, 150, 0.3);
+    box-shadow: var(--glow-primary), var(--shadow);
+    transform: translateX(4px);
 }
 
 .nav-item svg {
@@ -127,11 +131,18 @@
     width: 40px;
     height: 40px;
     border-radius: 10px;
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    background: linear-gradient(135deg, var(--primary-light), var(--primary));
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
+    box-shadow: var(--glow-primary);
+    animation: pulse-glow 3s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+    0%, 100% { box-shadow: var(--glow-primary); }
+    50% { box-shadow: 0 0 30px rgba(0, 217, 184, 0.5); }
 }
 
 .admin-info {
@@ -619,6 +630,13 @@
     border: 1px solid var(--border-color);
     border-radius: 16px;
     padding: 2rem;
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+}
+
+.section-card:hover {
+    box-shadow: var(--shadow-lg);
+    border-color: rgba(0, 217, 184, 0.3);
 }
 
 .section-header {
@@ -809,34 +827,38 @@
 
 .btn-delete {
     padding: 0.5rem 1rem;
-    background: var(--danger);
+    background: linear-gradient(135deg, var(--danger), #dc2626);
     border: none;
     border-radius: 8px;
     color: white;
-    font-weight: 500;
+    font-weight: 600;
     font-size: 0.875rem;
     cursor: pointer;
     transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
 }
 
 .btn-delete:hover {
-    background: #dc2626;
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.4), 0 4px 12px rgba(239, 68, 68, 0.3);
 }
 
 .btn-approve {
     padding: 0.5rem 1rem;
-    background: var(--success);
+    background: linear-gradient(135deg, var(--success), #059669);
     border: none;
     border-radius: 8px;
     color: white;
-    font-weight: 500;
+    font-weight: 600;
     font-size: 0.875rem;
     cursor: pointer;
     transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
 }
 
 .btn-approve:hover {
-    background: #059669;
+    transform: translateY(-2px);
+    box-shadow: var(--glow-success), 0 4px 12px rgba(16, 185, 129, 0.3);
 }
 
 /* Images Grid */
@@ -915,6 +937,14 @@
     border-radius: 12px;
     padding: 1.5rem;
     border-left: 4px solid var(--primary);
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow);
+}
+
+.review-card:hover {
+    transform: translateX(4px);
+    box-shadow: var(--shadow-lg);
+    border-left-color: var(--primary-light);
 }
 
 .review-header {
@@ -934,13 +964,14 @@
     width: 48px;
     height: 48px;
     border-radius: 12px;
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    background: linear-gradient(135deg, var(--primary-light), var(--primary));
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
     font-weight: 700;
     font-size: 1.25rem;
+    box-shadow: var(--glow-primary);
 }
 
 .review-author-info h4 {

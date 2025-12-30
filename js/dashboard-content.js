@@ -324,8 +324,7 @@ async function handleAddReview(e) {
         country: document.getElementById('reviewCountry').value,
         rating: parseInt(document.getElementById('reviewRating').value),
         text: document.getElementById('reviewText').value,
-        approved: true,
-        date: new Date().toISOString()
+        source: 'admin'
     };
     
     const submitBtn = e.target.querySelector('button[type="submit"]');
@@ -383,12 +382,12 @@ async function loadReviews() {
                     </div>
                     <p class="review-text">${review.text}</p>
                     <div class="review-footer">
-                        <span class="review-status ${review.approved ? 'approved' : 'pending'}">
-                            ${review.approved ? 'Approved' : 'Pending'}
+                        <span class="review-status ${review.status === 'approved' ? 'approved' : 'pending'}">
+                            ${review.status === 'approved' ? 'Approved' : 'Pending'}
                         </span>
                         <span class="review-date">${new Date(review.date).toLocaleDateString()}</span>
                         <div class="review-actions">
-                            ${!review.approved ? `<button class="btn-approve" onclick="approveReview('${review.id}')">Approve</button>` : ''}
+                            ${review.status !== 'approved' ? `<button class="btn-approve" onclick="approveReview('${review.id}')">Approve</button>` : ''}
                             <button class="btn-delete" onclick="deleteReview('${review.id}')">Delete</button>
                         </div>
                     </div>
@@ -406,10 +405,10 @@ async function loadReviews() {
 // Approve review
 window.approveReview = async function(id) {
     try {
-        const response = await fetch(`${API_BASE}/reviews/approve`, {
-            method: 'POST',
+        const response = await fetch(`${API_BASE}/reviews`, {
+            method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id })
+            body: JSON.stringify({ id, status: 'approved' })
         });
         
         const result = await response.json();

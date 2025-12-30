@@ -4,6 +4,34 @@ import { put, list } from '@vercel/blob';
 
 const REVIEWS_BLOB_PATH = 'reviews-data.json';
 
+// Default reviews to preserve existing data
+function getDefaultReviews() {
+  return [
+    {
+      id: '1735552800000',
+      name: 'Sayan Roy',
+      email: '',
+      country: 'India',
+      rating: 5,
+      text: 'Very helpful, polite, humble and responsible person. We got Mawjood bhai as our guide and we had a great tour with him. He helped us in manu situations, always arrived at time and took full responsibility of us and our trip, plus point for Indians that he speaks and understand Hindi hence it was very much easy for us to communicate. We definitely recommend him for your tour to Srilanka.',
+      date: new Date('2025-12-29').toISOString(),
+      status: 'pending',
+      source: 'user'
+    },
+    {
+      id: '1735552900000',
+      name: 'Darshan Shah',
+      email: '',
+      country: 'India',
+      rating: 4,
+      text: 'Very delightful experience. Mr. Mawjood was really helpful in price negotiation with whale watching and scuba diving dealers, clicking photos and having fluent conversation.',
+      date: new Date('2025-12-29').toISOString(),
+      status: 'pending',
+      source: 'user'
+    }
+  ];
+}
+
 // Helper to get reviews from Blob Store
 async function getReviews() {
   try {
@@ -21,12 +49,12 @@ async function getReviews() {
       }
     }
     
-    // If file doesn't exist yet, return empty array
-    console.log('No reviews found in Blob Store, returning empty array');
-    return [];
+    // If file doesn't exist yet, return default reviews
+    console.log('No reviews found in Blob Store, returning default reviews');
+    return getDefaultReviews();
   } catch (error) {
     console.error('Error fetching reviews from Blob:', error.message);
-    return [];
+    return getDefaultReviews();
   }
 }
 
