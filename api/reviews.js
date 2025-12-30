@@ -91,11 +91,15 @@ export default async function handler(req, res) {
       const { approved } = req.query;
       const reviews = await getReviews();
       
+      console.log('GET request - Total reviews:', reviews.length);
+      
       if (approved === 'true') {
         const approvedReviews = reviews.filter(r => r.status === 'approved');
+        console.log('Approved reviews:', approvedReviews.length);
         return res.status(200).json({ success: true, data: approvedReviews });
       }
       
+      console.log('Returning all reviews');
       return res.status(200).json({ success: true, data: reviews });
     }
 
@@ -130,17 +134,31 @@ export default async function handler(req, res) {
       // Update review (approve/reject)
       const { id, status } = req.body;
       
+      console.log('PUT request received - ID:', id, 'Status:', status);
+      
       if (!id || !status) {
         return res.status(400).json({ success: false, error: 'Missing required fields' });
       }
 
       const reviews = await getReviews();
-      const updatedReviews = reviews.map(review => 
-        review.id === id ? { ...review, status } : review
-      );
-      await saveReviews(updatedReviews);
+      console.log('Current reviews count:', reviews.length);
       
-      return res.status(200).json({ success: true });
+      const reviewToUpdate = reviews.find(r => r.id === id);
+      if (!reviewToUpdate) {
+        console.error('Review not found with ID:', id);
+        return res.status(404).json({ success: false, error: 'Review not found' });
+      }
+      
+      console.log('Found review to update:', reviewToUpdate.name);
+      
+      const updatedReviews = reviews.map(review => 
+        review.id === id ? { ...review, status, updatedAt: new Date().toISOString() } : review
+      );
+      
+      await saveReviews(updatedReviews);
+      console.log('Review updated successfully - New status:', status);
+      
+      return res.status(200).json({ success: true, data: updatedReviews.find(r => r.id === id) });
     }
 
     if (req.method === 'DELETE') {

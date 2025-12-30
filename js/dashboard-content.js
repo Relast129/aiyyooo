@@ -363,9 +363,12 @@ async function handleAddReview(e) {
 async function loadReviews() {
     const list = document.getElementById('reviewsList');
     
+    console.log('Loading reviews from API...');
+    
     try {
         const response = await fetch(`${API_BASE}/reviews`);
         const result = await response.json();
+        console.log('Reviews loaded:', result);
         
         if (result.success && result.data && result.data.length > 0) {
             list.innerHTML = result.data.map(review => `
@@ -404,6 +407,8 @@ async function loadReviews() {
 
 // Approve review
 window.approveReview = async function(id) {
+    console.log('Approving review with ID:', id);
+    
     try {
         const response = await fetch(`${API_BASE}/reviews`, {
             method: 'PUT',
@@ -411,23 +416,28 @@ window.approveReview = async function(id) {
             body: JSON.stringify({ id, status: 'approved' })
         });
         
+        console.log('Approve response status:', response.status);
         const result = await response.json();
+        console.log('Approve result:', result);
         
         if (result.success) {
-            alert('Review approved!');
+            alert('✅ Review approved successfully! It will now appear on your website.');
             loadReviews();
         } else {
+            console.error('Approval failed:', result.error);
             alert('Error approving review: ' + result.error);
         }
     } catch (error) {
         console.error('Error approving review:', error);
-        alert('Error approving review');
+        alert('Error approving review: ' + error.message);
     }
 };
 
 // Delete review
 window.deleteReview = async function(id) {
     if (!confirm('Are you sure you want to delete this review?')) return;
+    
+    console.log('Deleting review with ID:', id);
     
     try {
         const response = await fetch(`${API_BASE}/reviews`, {
@@ -436,17 +446,20 @@ window.deleteReview = async function(id) {
             body: JSON.stringify({ id })
         });
         
+        console.log('Delete response status:', response.status);
         const result = await response.json();
+        console.log('Delete result:', result);
         
         if (result.success) {
-            alert('Review deleted!');
+            alert('✅ Review deleted successfully!');
             loadReviews();
         } else {
+            console.error('Delete failed:', result.error);
             alert('Error deleting review: ' + result.error);
         }
     } catch (error) {
         console.error('Error deleting review:', error);
-        alert('Error deleting review');
+        alert('Error deleting review: ' + error.message);
     }
 };
 
